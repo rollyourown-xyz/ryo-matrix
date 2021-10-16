@@ -1,10 +1,4 @@
 ---
-## The generic directory /var/containers/{{ project_id }}
-## for LXD container persistent storage must be created
-## Further project-specific container directories should be
-## added here
-## -----------------------------------------------------------
-
 ## Directories for project-specific LXD container persistent storage
 ## -----------------------------------------------------------------
 
@@ -14,11 +8,22 @@
     state: directory
     mode: '0755'
 
-## Create directory for project ABC container
+### Synapse directories
 
-# Example
-# - name: Create a directory for <ABC> container mounts
-#   file:
-#     path: "/var/containers/{{ project_id }}/<ABC>"
-#     state: directory
-#     mode: '0755'
+- name: Create a directory for synapse content
+  file:
+    path: "/var/containers/{{ project_id }}/synapse"
+    state: directory
+    mode: '0755'
+
+- name: Create a directory for synapse config
+  file:
+    path: "/var/containers/{{ project_id }}/synapse/config"
+    state: directory
+    mode: '0755'
+
+- name: Create a directory for synapse data
+  file:
+    path: "/var/containers/{{ project_id }}/synapse/data"
+    state: directory
+    mode: '0755'
