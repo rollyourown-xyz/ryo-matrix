@@ -40,8 +40,6 @@ fi
 echo "Running module-specific host setup playbooks"
 echo ""
 
-## Common to almost all projects - service proxy module
-## Remove if not required
 ## Module-specific host setup for ryo-service-proxy
 if [ -f ""$SCRIPT_DIR"/../ryo-service-proxy/configuration/"$hostname"_playbooks_executed" ]
 then
@@ -53,12 +51,43 @@ else
    "$SCRIPT_DIR"/../ryo-service-proxy/host-setup.sh -n "$hostname"
 fi
 
-## Other module-specific host setup here...
+# Module-specific host setup for ryo-postgres
+if [ -f ""$SCRIPT_DIR"/../ryo-postgres/configuration/"$hostname"_playbooks_executed" ]
+then
+   echo "Host setup for ryo-postgres module has already been done on "$hostname""
+   echo ""
+else
+   echo "Running module-specific host setup script for ryo-postgres on "$hostname""
+   echo ""
+   "$SCRIPT_DIR"/../ryo-postgres/host-setup.sh -n "$hostname"
+fi
+
+## Module-specific host setup for ryo-wellknown
+if [ -f ""$SCRIPT_DIR"/../ryo-wellknown/configuration/"$hostname"_playbooks_executed" ]
+then
+   echo "Host setup for ryo-wellknown module has already been done on "$hostname""
+   echo ""
+else
+   echo "Running module-specific host setup script for ryo-wellknown on "$hostname""
+   echo ""
+   "$SCRIPT_DIR"/../ryo-wellknown/host-setup.sh -n "$hostname"
+fi
+
+# Module-specific host setup for ryo-coturn
+if [ -f ""$SCRIPT_DIR"/../ryo-coturn/configuration/"$hostname"_playbooks_executed" ]
+then
+   echo "Host setup for ryo-coturn module has already been done on "$hostname""
+   echo ""
+else
+   echo "Running module-specific host setup script for ryo-coturn on "$hostname""
+   echo ""
+   "$SCRIPT_DIR"/../ryo-coturn/host-setup.sh -n "$hostname"
+fi
 
 ## Project-specific host setup
 if [ -f ""$SCRIPT_DIR"/configuration/"$hostname"_playbooks_executed" ]
 then
-   echo "Host setup for <PROJECT_NAME> project has already been done on "$hostname""
+   echo "Host setup for ryo-matrix-standalone project has already been done on "$hostname""
    echo ""
 else
    echo "Executing project-specific host setup playbooks on "$hostname""
