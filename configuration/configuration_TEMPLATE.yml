@@ -29,8 +29,7 @@ project_admin_username: <USERNAME>
 # Enter a password for the administrator of this project.
 # !!! The password should have a minimum of 12 characters with at least
 # !!! 1 upper case character, 1 lower case character and 1 numerical digit
-# This password will be used for logging in to the keycloak service for administering users and
-# will be the username and password for the synapse administrator account
+# This password will be the username and password for the synapse administrator account
 project_admin_password: <PASSWORD>
 
 # Enter an email address for the administrator of this project, 
