@@ -23,6 +23,14 @@
     force: yes
 
 
+# Disable default site in sites-enabled directory
+#
+- name: Disable default site in sites-enabled directory
+  file:
+    path: "/etc/nginx/sites-enabled/default"
+    state: absent
+
+
 # Enable synapse-admin site in sites-enabled directory
 #
 - name: Enable synapse-admin in sites-enabled directory
