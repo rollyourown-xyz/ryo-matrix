@@ -596,9 +596,9 @@ oidc_providers:
   #  user_mapping_provider:
   #    config:
   #      subject_claim: "id"
-  #      localpart_template: "{{ user.login }}"
-  #      display_name_template: "{{ user.name }}"
-  #      email_template: "{{ user.email }}"
+  #      localpart_template: "{{ '{{' }} user.login {{ '}}' }}"
+  #      display_name_template: "{{ '{{' }} user.name {{ '}}' }}"
+  #      email_template: "{{ '{{' }} user.email {{ '}}' }}"
   #  attribute_requirements:
   #    - attribute: userGroup
   #      value: "synapseUsers"
