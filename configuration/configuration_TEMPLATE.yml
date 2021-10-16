@@ -11,15 +11,52 @@
 
 # The project ID must be 15 characters or less and should be unique amongst
 # projects
-project_id: <PROJECT ID>
-
-## The following will contain settings specific to the project
-## THE FOLLOWING ARE EXAMPLES
+project_id: ryo-matrix-standalone
 
 # Set the domain to be used for the project. The DNS A record for the project's 
 # domain must be set to point to the public IPv4 address of your host server
 project_domain_name: <DOMAIN>
 
+# Set the STUN/TURN server subdomain to be used for the project - for example coturn.{{project_domain_name}}
+# The DNS A record for the project's STUN/TURN server domain must be set to point to the public IPv4 address
+# of your host server
+project_coturn_domain_name: <SUBDOMAIN>.<DOMAIN>
+
+# Enter a username for the administrator of this project, 
+# this will be used for logging in to the synapse-admin service for administering users
+project_admin_username: <USERNAME>
+
+# Enter a password for the administrator of this project.
+# !!! The password should have a minimum of 12 characters with at least
+# !!! 1 upper case character, 1 lower case character and 1 numerical digit
+# This password will be used for logging in to the keycloak service for administering users and
+# will be the username and password for the synapse administrator account
+project_admin_password: <PASSWORD>
+
 # Enter an email address for the administrator of this project, 
-# this will be used for letsencrypt certificates
+# this will be used for letsencrypt certificates and for the keycloak and matrix services
 project_admin_email: <EMAIL ADDRESS>
+
+# SMTP Server settings
+# An email server account is needed for sending user account emails (e.g. password reset) to 
+# users of the matrix server deployed by the project. The parameters for the SMTP server should
+# be available from your domain and email hosting provider
+project_smtp_server: <SMTP SERVER NAME>
+project_smtp_server_port: <PORT NUMBER>
+project_smtp_server_starttls: <true OR false, depending on the SMTP server configuration>
+project_smtp_server_ssl: <true OR false, depending on the SMTP server configuration>
+
+# SMTP Account settings
+# The user account for the SMTP server should be available from your domain and email hosting provider
+project_smtp_server_username: <USERNAME>
+project_smtp_server_password: <PASSWORD>
+
+# Change the locales to be supported by the project's services if needed. Supported locales should be
+# given in a list of ISO 639-1 locale codes, e.g. [ "en", "de", "fr", "es" ] and the default 
+# locale should be one of the supported locales, e.g. "en"
+project_locales: [ "en", "de", "fr", "es" ]
+project_default_locale: en
+
+# Change the default country code to use when showing country selectors (e.g. with phone number input in
+# element-web). The country code should be an ISO 3166-1 alpha2 country code.
+project_default_country_code: "GB"
