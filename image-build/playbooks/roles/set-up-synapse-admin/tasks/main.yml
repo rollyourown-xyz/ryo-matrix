@@ -1,0 +1,44 @@
+---
+# Set server_names_hash_bucket_size in nginx config
+#
+- name: Set server_names_hash_bucket_size in nginx config
+  lineinfile:
+    dest: /etc/nginx/nginx.conf
+    regexp: "server_names_hash_bucket_size"
+    line: "\tserver_names_hash_bucket_size 64;"
+    state: present
+    insertafter: '^http {'
+  register: changes_made
+
+
+# Copy NGINX sites-available file
+#
+- name: Copy nginx sites-available file
+  template:
+    mode: 0644
+    owner: root
+    group: root
+    dest: "/etc/nginx/sites-available/synapse-admin"
+    src: nginx-sites-available.j2
+    force: yes
+
+
+# Enable synapse-admin site in sites-enabled directory
+#
+- name: Enable synapse-admin in sites-enabled directory
+  file:
+    src: "/etc/nginx/sites-available/synapse-admin"
+    dest: "/etc/nginx/sites-enabled/synapse-admin"
+    state: link
+
+
+# Copy synapse-admin-services consul service configuration file
+#
+- name: Copy synapse-admin-services consul service configuration file
+  copy:
+    mode: 0640
+    owner: consul
+    group: consul
+    dest: /etc/consul.d/synapse-admin-services.hcl
+    src: synapse-admin-services.hcl
+    force: yes
