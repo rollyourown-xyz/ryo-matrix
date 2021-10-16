@@ -1,0 +1,96 @@
+---
+
+# Set server_names_hash_bucket_size in nginx config
+#
+- name: Set server_names_hash_bucket_size in nginx config
+  lineinfile:
+    dest: /etc/nginx/nginx.conf
+    regexp: "server_names_hash_bucket_size"
+    line: "\tserver_names_hash_bucket_size 64;"
+    state: present
+    insertafter: '^http {'
+  register: changes_made
+
+
+# Create the www directory
+#
+- name: Create the /var/www directory
+  file:
+    path: /var/www
+    state: directory
+    mode: 0755
+
+
+# Create directory for element-web
+#
+- name: Create the /var/www/element-v{{ element_version }} directory
+  file:
+    path: /var/www/element-v{{ element_version }}
+    state: directory
+    mode: 0755
+
+
+# Download and unpack element-web version {{ element_version }}
+#
+- name: Download and unpack element-web v{{ element_version }}
+  unarchive:
+    mode: 0755
+    owner: www-data
+    group: www-data
+    dest: /var/www
+    src: https://github.com/vector-im/element-web/releases/download/v{{ element_version }}/element-v{{ element_version }}.tar.gz
+    remote_src: yes
+
+
+# Copy the element-web configuration file
+#
+- name: Copy the element-web configuration file
+  template:
+    mode: 0644
+    owner: www-data
+    group: www-data
+    dest: "/var/www/element-v{{ element_version }}/config.element.{{ project_domain_name }}.json"
+    src: element-config.json.j2
+    force: yes
+
+
+# Create version-less symbolic link 
+#
+- name: Create version-less symbolic link
+  file:
+    src: /var/www/element-v{{ element_version }}
+    dest: /var/www/element
+    state: link
+
+
+# Copy NGINX sites-available file
+#
+- name: Copy nginx sites-available file
+  template:
+    mode: 0644
+    owner: root
+    group: root
+    dest: "/etc/nginx/sites-available/element.{{ project_domain_name }}"
+    src: nginx-sites-available.j2
+    force: yes
+
+
+# Enable element-web site in sites-enabled directory
+#
+- name: Enable element-web in sites-enabled directory
+  file:
+    src: "/etc/nginx/sites-available/element.{{ project_domain_name }}"
+    dest: "/etc/nginx/sites-enabled/element.{{ project_domain_name }}"
+    state: link
+
+
+# Copy element-services consul service configuration file
+#
+- name: Copy element-services consul service configuration file
+  copy:
+    mode: 0640
+    owner: consul
+    group: consul
+    dest: /etc/consul.d/element-services.hcl
+    src: element-services.hcl
+    force: yes

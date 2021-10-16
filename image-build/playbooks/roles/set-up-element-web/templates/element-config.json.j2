@@ -1,0 +1,60 @@
+{
+    "default_server_config": {
+        "m.homeserver": {
+            "base_url": "https://matrix.{{ project_domain_name }}",
+            "server_name": "{{ project_domain_name }}"
+        }
+    },
+    "disable_custom_urls": true,
+    "disable_guests": true,
+    "disable_login_language_selector": false,
+    "disable_3pid_login": true,
+    "brand": "{{ project_domain_name }}",
+    "integrations_ui_url": "https://scalar.vector.im/",
+    "integrations_rest_url": "https://scalar.vector.im/api",
+    "integrations_widgets_urls": [
+        "https://scalar.vector.im/_matrix/integrations/v1",
+        "https://scalar.vector.im/api",
+        "https://scalar-staging.vector.im/_matrix/integrations/v1",
+        "https://scalar-staging.vector.im/api",
+        "https://scalar-staging.riot.im/scalar/api"
+    ],
+    "bug_report_endpoint_url": "https://element.io/bugreports/submit",
+    "defaultCountryCode": "{{ project_default_country_code }}",
+    "showLabsSettings": true,
+    "features": {
+        "feature_new_spinner": false,
+        "feature_pinning": false,
+        "feature_custom_status": false,
+        "feature_custom_tags": false,
+        "feature_state_counters": false,
+        "feature_many_integration_managers": false,
+        "feature_mjolnir": false,
+        "feature_custom_themes": false,
+        "feature_dnd": true,
+        "feature_spaces": true
+    },
+    "default_federate": false,
+    "default_theme": "light",
+    "roomDirectory": {
+        "servers": [
+            "matrix.{{ project_domain_name }}"
+        ]
+    },
+    "piwik": false,
+    "enable_presence_by_hs_url": {
+        "https://matrix.{{ project_domain_name }}": true,
+        "https://matrix.org": false,
+        "https://matrix-client.matrix.org": false
+    },
+    "settingDefaults": {
+        "breadcrumbs": true,
+        "UIFeature.feedback": false,
+        "UIFeature.advancedSettings": false,
+        "UIFeature.shareQrCode": false,
+        "UIFeature.shareSocial": false,
+        "UIFeature.registration": false,
+        "UIFeature.passwordReset": false,
+        "UIFeature.deactivate": false
+    }
+}
