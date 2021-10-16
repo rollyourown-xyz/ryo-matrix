@@ -1,0 +1,31 @@
+---
+
+- name: Add matrix.org repository key
+  apt_key:
+    url: https://packages.matrix.org/debian/matrix-org-archive-keyring.gpg
+    state: present
+
+- name: Add matrix.org package repository
+  apt_repository:
+    repo: 'deb https://packages.matrix.org/debian/ focal main'
+    state: present
+    update_cache: yes
+
+- name: Install necessary packages
+  apt:
+    name:
+    - python3-psycopg2
+    - libpq5
+    update_cache: yes
+    state: present
+
+- name: Install xz-utils package to extract the control file of the deb package install in the following task
+  apt:
+    name: xz-utils
+    update_cache: yes
+    state: present
+
+- name: Install synapse version {{ synapse_version }}
+  apt:
+    deb: "https://packages.matrix.org/debian/pool/main/m/matrix-synapse-py3/matrix-synapse-py3_{{ synapse_version }}+focal1_amd64.deb"
+    state: present
