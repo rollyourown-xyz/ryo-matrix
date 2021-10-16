@@ -1,0 +1,16 @@
+---
+- name: Provision element-web container image
+  hosts: packer
+
+  vars_files:
+    # Project configuration
+    - "{{ playbook_dir }}/../../configuration/configuration_{{ host_id }}.yml"
+
+  roles:
+    - role: upgrade-container
+    - role: install-iptables
+    - role: install-consul
+    - role: install-nginx
+    - role: set-up-firewall-element
+    - role: set-up-consul
+    - role: set-up-element-web
