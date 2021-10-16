@@ -1,0 +1,116 @@
+---
+### See https://github.com/Awesome-Technologies/synapse-admin/blob/master/README.md
+
+# Add yarn repository key
+#
+- name: Add yarn repository key
+  apt_key:
+    url: https://dl.yarnpkg.com/debian/pubkey.gpg
+    state: present
+
+
+# Add yarn packages repository
+#
+- name: Add yarn packages repository
+  apt_repository:
+    repo: 'deb https://dl.yarnpkg.com/debian/ stable main'
+    state: present
+    update_cache: yes
+
+
+# Install node.js, npm and yarn packages
+#
+- name: Install node.js npm and yarn
+  apt:
+    name:
+    - nodejs
+    - npm
+    - yarn
+    update_cache: yes
+    state: present
+
+
+# Ensure git is installed
+#
+- name: Ensure git is installed
+  apt:
+    name: git
+    update_cache: yes
+    state: present
+
+
+# Create directory for synapse-admin repository cloning
+# 
+- name: Create directory for cloning synapse-admin repository cloning
+  file:
+    path: /opt/nodejs
+    state: directory
+    mode: 0755
+
+
+# Clone synapse-admin version {{ synapse_admin_version }} from the synapse-admin git repo
+#
+- name: Clone synapse-admin version {{ synapse_admin_version }} from the git repo
+  git:
+    repo: 'https://github.com/Awesome-Technologies/synapse-admin.git'
+    dest: /opt/nodejs/synapse-admin
+    clone: yes
+    depth: "1"
+    version: "{{ synapse_admin_version }}"
+    update: no
+
+
+# Add environment variable to lock synapse-admin to project synapse container
+#
+- name: Add environment variable to lock synapse-admin to project synapse container
+  lineinfile:
+    dest: /opt/nodejs/synapse-admin/.env
+    line: "REACT_APP_SERVER=http://synapse.service.consul"
+    state: present
+
+
+# Install synapse-admin dependencies with yarn install
+#
+- name: Install synapse-admin dependencies with yarn install
+  yarn:
+    path: /opt/nodejs/synapse-admin
+
+
+# Build synapse-admin
+#
+- name: Build synapse-admin
+  command:
+    chdir: /opt/nodejs/synapse-admin
+    cmd: yarn build
+    creates: /opt/nodejs/synapse-admin/build
+
+
+# Create directory for production synapse-admin files
+#
+- name: Create directory for production synapse-admin files
+  file:
+    owner: www-data
+    group: www-data
+    mode: 0755
+    path: /var/www/synapse-admin
+    state: directory
+
+
+# Copy contents of synapse-admin build to /var/www/synapse-admin directory
+#
+- name: Copy synapse-admin build into /var/www/synapse-admin
+  copy:
+    owner: www-data
+    group: www-data
+    src: /opt/nodejs/synapse-admin/build/
+    remote_src: yes
+    dest: /var/www/synapse-admin/
+    force: yes
+
+
+# Remove cloned synapse-admin repository
+# 
+- name: Remove cloned synapse-admin repository
+  file:
+    path: /opt/nodejs
+    state: absent
