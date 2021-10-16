@@ -1,0 +1,249 @@
+---
+
+# Check existence of a previously generated postgres synapse user password for the host
+#
+- name: Check existence of a previously generated postgres synapse user password for the host
+  delegate_to: localhost
+  stat:
+    path: "{{ playbook_dir }}/../../configuration/postgres_synapse_user_password_{{ host_id }}.yml"
+  register: postgres_synapse_user_password_file
+
+
+# Load the postgres synapse user password from previously created file (if previously generated)
+#
+- name: Load the postgres synapse user password from previously created file
+  include_vars:
+    file: "{{ playbook_dir }}/../../configuration/postgres_synapse_user_password_{{ host_id }}.yml"
+  when: postgres_synapse_user_password_file.stat.exists
+
+
+# Generate a random string as postgres synapse user password (if not previously generated)
+#
+- name: Generate a random string as postgres synapse user password
+  shell: "tr -dc A-Za-z0-9 </dev/urandom | head -c 24"
+  register: postgres_synapse_user_password_stdout
+  when: not postgres_synapse_user_password_file.stat.exists
+
+
+# Assign the postgres synapse user password to the variable postgres_synapse_user_password (if not previously generated)
+#
+- name: Assign the postgres synapse user password to the variable postgres_synapse_user_password
+  set_fact:
+    postgres_synapse_user_password: "{{ postgres_synapse_user_password_stdout.stdout }}"
+  when: not postgres_synapse_user_password_file.stat.exists
+
+
+# Write the postgres synapse user password to a file in the module configuration directory on the local machine (if not previously generated)
+#
+- name: Write the postgres synapse user password to a file in the module configuration directory
+  delegate_to: localhost
+  template:
+    mode: 0640
+    owner: "{{ local_non_root_user }}"
+    group: "{{ local_non_root_user }}"
+    dest: "{{ playbook_dir }}/../../configuration/postgres_synapse_user_password_{{ host_id }}.yml"
+    src: postgres_synapse_user_password.yml.j2
+    force: yes
+    backup: yes
+  when: not postgres_synapse_user_password_file.stat.exists
+
+
+# Check existence of a previously generated synapse registration shared secret for the host
+#
+- name: Check existence of a previously generated synapse registration shared secret for the host
+  delegate_to: localhost
+  stat:
+    path: "{{ playbook_dir }}/../../configuration/synapse_registration_shared_secret_{{ host_id }}.yml"
+  register: synapse_registration_shared_secret_file
+
+
+# Load the synapse registration shared secret from previously created file (if previously generated)
+#
+- name: Load the synapse registration shared secret from previously created file
+  include_vars:
+    file: "{{ playbook_dir }}/../../configuration/synapse_registration_shared_secret_{{ host_id }}.yml"
+  when: synapse_registration_shared_secret_file.stat.exists
+
+
+# Generate a random string as synapse registration shared secret (if not previously generated)
+#
+- name: Generate a random string as synapse registration shared secret
+  shell: "tr -dc A-Za-z0-9 </dev/urandom | head -c 24"
+  register: synapse_registration_shared_secret_stdout
+  when: not synapse_registration_shared_secret_file.stat.exists
+
+
+# Assign the synapse registration shared secret to the variable synapse_registration_shared_secret (if not previously generated)
+#
+- name: Assign the synapse registration shared secret to the variable synapse_registration_shared_secret
+  set_fact:
+    synapse_registration_shared_secret: "{{ synapse_registration_shared_secret_stdout.stdout }}"
+  when: not synapse_registration_shared_secret_file.stat.exists
+
+
+# Write the synapse registration shared secret to a file in the module configuration directory on the local machine (if not previously generated)
+#
+- name: Write the synapse registration shared secret to a file in the module configuration directory
+  delegate_to: localhost
+  template:
+    mode: 0640
+    owner: "{{ local_non_root_user }}"
+    group: "{{ local_non_root_user }}"
+    dest: "{{ playbook_dir }}/../../configuration/synapse_registration_shared_secret_{{ host_id }}.yml"
+    src: synapse_registration_shared_secret.yml.j2
+    force: yes
+    backup: yes
+  when: not synapse_registration_shared_secret_file.stat.exists
+
+
+# Check existence of a previously generated synapse password pepper for the host
+#
+- name: Check existence of a previously generated synapse password pepper for the host
+  delegate_to: localhost
+  stat:
+    path: "{{ playbook_dir }}/../../configuration/synapse_password_pepper_{{ host_id }}.yml"
+  register: synapse_password_pepper_file
+
+
+# Load the synapse password pepper from previously created file (if previously generated)
+#
+- name: Load the synapse password pepper from previously created file
+  include_vars:
+    file: "{{ playbook_dir }}/../../configuration/synapse_password_pepper_{{ host_id }}.yml"
+  when: synapse_password_pepper_file.stat.exists
+
+
+# Generate a random string as synapse password pepper (if not previously generated)
+#
+- name: Generate a random string as synapse password pepper
+  shell: "tr -dc A-Za-z0-9 </dev/urandom | head -c 24"
+  register: synapse_password_pepper_stdout
+  when: not synapse_password_pepper_file.stat.exists
+
+
+# Assign the synapse password pepper to the variable synapse_password_pepper (if not previously generated)
+#
+- name: Assign the synapse password pepper to the variable synapse_password_pepper
+  set_fact:
+    synapse_password_pepper: "{{ synapse_password_pepper_stdout.stdout }}"
+  when: not synapse_password_pepper_file.stat.exists
+
+
+# Write the synapse password pepper to a file in the module configuration directory on the local machine (if not previously generated)
+#
+- name: Write the synapse password pepper to a file in the module configuration directory
+  delegate_to: localhost
+  template:
+    mode: 0640
+    owner: "{{ local_non_root_user }}"
+    group: "{{ local_non_root_user }}"
+    dest: "{{ playbook_dir }}/../../configuration/synapse_password_pepper_{{ host_id }}.yml"
+    src: synapse_password_pepper.yml.j2
+    force: yes
+    backup: yes
+  when: not synapse_password_pepper_file.stat.exists
+
+
+# Create directory for bootstrapping
+#
+- name: Create the /usr/local/bootstrap directory
+  file:
+    path: /usr/local/bootstrap
+    state: directory
+    mode: 0755
+
+
+# Copy server_name.yaml configuration file to bootstrapping directory
+#
+- name: Push server_name.yaml configuration file
+  template:
+    mode: 0644
+    owner: root
+    group: root
+    dest: /usr/local/bootstrap/server_name.yaml
+    src: server_name.yaml.j2
+    force: yes
+
+
+# Copy report_stats.yaml configuration file to bootstrapping directory
+#
+- name: Copy report_stats.yaml configuration file
+  copy:
+    mode: 0644
+    owner: root
+    group: root
+    dest: /usr/local/bootstrap/report_stats.yaml
+    src: report_stats.yaml
+    force: yes
+
+
+# Copy homeserver.yaml configuration file to bootstrapping directory
+#
+- name: Push homeserver.yaml configuration file
+  template:
+    mode: 0644
+    owner: root
+    group: root
+    dest: /usr/local/bootstrap/homeserver.yaml
+    src: homeserver.yaml.j2
+    force: yes
+
+
+# Copy log.yaml configuration file to bootstrapping directory
+#
+- name: Copy log.yaml configuration file
+  copy:
+    mode: 0644
+    owner: root
+    group: root
+    dest: /usr/local/bootstrap/log.yaml
+    src: log.yaml
+    force: yes
+
+
+# Copy bootstrapping script 
+#
+- name: Copy bootstrapping script
+  template:
+    mode: 0770
+    owner: root
+    group: root
+    dest: /usr/local/bin/synapse-bootstrap.sh
+    src: synapse-bootstrap.sh.j2
+    force: yes
+
+
+# Disable synapse start at boot and stop the service
+- name: Enable matrix-synapse service
+  service:
+    name: matrix-synapse.service
+    enabled: no
+    state: stopped
+
+
+# Remove the directory /etc/matrix-synapse from the installation
+#
+- name: Remove the directory /etc/matrix-synapse
+  file:
+    path: /etc/matrix-synapse
+    state: absent
+
+
+# Remove the directory /var/lib/matrix-synapse from the installation
+#
+- name: Remove the directory /var/lib/matrix-synapse
+  file:
+    path: /var/lib/matrix-synapse
+    state: absent
+
+
+# Copy synapse-services consul service configuration file
+#
+- name: Copy synapse-services consul service configuration file
+  copy:
+    mode: 0640
+    owner: consul
+    group: consul
+    dest: /etc/consul.d/synapse-services.hcl
+    src: synapse-services.hcl
+    force: yes

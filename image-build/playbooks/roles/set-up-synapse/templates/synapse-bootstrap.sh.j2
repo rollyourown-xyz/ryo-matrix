@@ -1,0 +1,54 @@
+#!/bin/sh
+
+# If the file "BOOTSRTAPPED" is not already present then run bootstrapping tasks
+if [ ! -f "/etc/matrix-synapse/BOOTSTRAPPED" ]; then
+  
+  # Create directory /etc/matrix-synapse/conf.d/
+  mkdir /etc/matrix-synapse/conf.d
+  
+  # Change ownership of /etc/matrix-synapse directory, recursively
+  chown -R matrix-synapse:nogroup /etc/matrix-synapse
+  
+  # Change ownership of /var/lib/matrix-synapse directory, recursively
+  chown -R matrix-synapse:nogroup /var/lib/matrix-synapse
+  
+  # Copy server_name.yaml from bootstrapping directory to /etc/matrix-synapse/conf.d/
+  cp -p /usr/local/bootstrap/server_name.yaml /etc/matrix-synapse/conf.d/server_name.yaml
+  
+  # Add file BOOTSTRAPPED to indicate no further bootstrapping needed
+  touch /etc/matrix-synapse/BOOTSTRAPPED
+
+fi
+
+# Copy report_stats.yaml from bootstrapping directory to /etc/matrix-synapse/conf.d/
+cp -p /usr/local/bootstrap/report_stats.yaml /etc/matrix-synapse/conf.d/report_stats.yaml
+
+# Copy homeserver.yaml from bootstrapping directory to /etc/matrix-synapse/
+cp -p /usr/local/bootstrap/homeserver.yaml /etc/matrix-synapse/homeserver.yaml
+
+# Copy log.yaml from bootstrapping directory to /etc/matrix-synapse/
+cp -p /usr/local/bootstrap/log.yaml /etc/matrix-synapse/log.yaml
+  
+# Enable synapse service
+service matrix-synapse enable
+
+# Start synapse service
+service matrix-synapse start
+
+
+# If the file "ADMIN_ADDED" is not already present then add synapse admin user
+if [ ! -f "/etc/matrix-synapse/ADMIN_ADDED" ]; then
+  
+  # Sleep for 60s to allow synapse to start
+  sleep 60
+
+  # Add synapse admin user
+  register_new_matrix_user --config /etc/matrix-synapse/homeserver.yaml http://127.0.0.1:8008 --user {{ project_admin_username }} --password {{ project_admin_password }} --admin
+
+  # Add file ADMIN_ADDED to indicate synapse admin user no longer needs to be added
+  touch /etc/matrix-synapse/ADMIN_ADDED
+
+fi
+
+
+
