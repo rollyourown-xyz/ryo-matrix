@@ -25,7 +25,7 @@ errorMessage()
 }
 
 # Project ID
-project_id='<PROJECT_ID>'
+project_id='ryo-matrix-standalone'
 
 deploy_modules='false'
 
@@ -45,9 +45,7 @@ then
    errorMessage
 fi
 
-# Common to almost all projects - service proxy module
-# Remove if not needed for this project
-# Deploy modules if -m flag is present
+# Deploy ryo-service-proxy if -m flag is present
 if [ $deploy_modules == 'true' ]
 then
    echo "Deploying ryo-service-proxy module on "$hostname" using images with version "$version""
@@ -58,6 +56,43 @@ else
    echo "Skipping modules deployment"
    echo ""
 fi
+
+# Deploy ryo-postgres if -m flag is present
+if [ $deploy_modules == 'true' ]
+then
+   echo "Deploying ryo-postgres module on "$hostname" using images with version "$version""
+   echo ""
+   "$SCRIPT_DIR"/../ryo-postgres/deploy-module.sh -n "$hostname" -v "$version"
+   echo ""
+else
+   echo "Skipping modules deployment"
+   echo ""
+fi
+
+# Deploy ryo-coturn if -m flag is present
+if [ $deploy_modules == 'true' ]
+then
+   echo "Deploying ryo-coturn module on "$hostname" using images with version "$version""
+   echo ""
+   "$SCRIPT_DIR"/../ryo-coturn/deploy-module.sh -n "$hostname" -v "$version"
+   echo ""
+else
+   echo "Skipping modules deployment"
+   echo ""
+fi
+
+# Deploy ryo-wellknown if -m flag is present
+if [ $deploy_modules == 'true' ]
+then
+   echo "Deploying ryo-wellknown module on "$hostname" using images with version "$version""
+   echo ""
+   "$SCRIPT_DIR"/../ryo-wellknown/deploy-module.sh -n "$hostname" -v "$version"
+   echo ""
+else
+   echo "Skipping modules deployment"
+   echo ""
+fi
+
 
 # Deploy project
 echo "Deploying project on "$hostname" using images with version=$version"
