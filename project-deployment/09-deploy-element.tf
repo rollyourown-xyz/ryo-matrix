@@ -1,0 +1,25 @@
+# Deploy element webserver
+##########################
+
+resource "lxd_container" "element" {
+  remote     = var.host_id
+  name       = "element"
+  image      = join("-", [ local.project_id, "element", var.image_version ])
+  profiles   = ["default"]
+  
+  config = { 
+    "security.privileged": "false"
+    "user.user-data" = file("cloud-init/cloud-init-basic.yml")
+  }
+  
+  # Provide eth0 interface with dynamic IP address
+  device {
+    name = "eth0"
+    type = "nic"
+
+    properties = {
+      name           = "eth0"
+      network        = var.host_id
+    }
+  }
+}
