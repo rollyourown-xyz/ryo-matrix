@@ -27,6 +27,7 @@ errorMessage()
 # Default software package versions
 element_version='1.9.2'
 synapse_version='1.44.0'
+synapse_admin_version='0.8.3'
 
 build_modules='false'
 
@@ -102,8 +103,9 @@ echo "Executing command: packer build -var \"host_id="$hostname"\" -var \"versio
 echo ""
 packer build -var "host_id="$hostname"" -var "version=$version" -var "synapse_version=$synapse_version" "$SCRIPT_DIR"/image-build/synapse.pkr.hcl
 
-###
-### !!! TODO: Add synapse-admin
-###
+echo "Building synapse-admin image on "$hostname""
+echo "Executing command: packer build -var \"host_id="$hostname"\" -var \"version=$version\" -var \"synapse_admin_version=$synapse_admin_version\" "$SCRIPT_DIR"/image-build/synapse-admin.pkr.hcl"
+echo ""
+packer build -var "host_id="$hostname"" -var "version=$version" -var "synapse_admin_version=$synapse_admin_version" "$SCRIPT_DIR"/image-build/synapse-admin.pkr.hcl
 
 echo "Completed"
