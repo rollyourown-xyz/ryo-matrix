@@ -65,7 +65,7 @@
 - name: Add environment variable to lock synapse-admin to project synapse container
   lineinfile:
     dest: /opt/nodejs/synapse-admin/.env
-    line: "REACT_APP_SERVER=http://synapse.service.consul"
+    line: "REACT_APP_SERVER=http://synapse.service.consul:8008"
     state: present
 
 
