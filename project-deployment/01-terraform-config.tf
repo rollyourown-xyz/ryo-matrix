@@ -1,7 +1,7 @@
 # Terraform providers required to deploy this project
 # lxd provider will always be used
 #
-# consul provider is needed to enable provisioning of the service proxy module
+# consul provider is needed to enable provisioning of the host consul service
 # postgresql provider is needed to enable provisioning of synapse database
 #################################################################################
 
