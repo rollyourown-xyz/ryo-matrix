@@ -53,14 +53,12 @@ locals {
   lxd_host_network_part         = yamldecode(file(local.host_configuration))["lxd_host_network_part"]
 }
 
-# Variables from module remote states
-
-data "terraform_remote_state" "ryo-service-proxy" {
-  backend = "local"
-  config = {
-    path = join("", ["${abspath(path.root)}/../../ryo-service-proxy/module-deployment/terraform.tfstate.d/", var.host_id, "/terraform.tfstate"])
-  }
+# Consul variables
+locals {
+  consul_ip_address  = join("", [ local.lxd_host_network_part, ".1" ])
 }
+
+# Variables from module remote states
 
 data "terraform_remote_state" "ryo-postgres" {
   backend = "local"
@@ -70,7 +68,6 @@ data "terraform_remote_state" "ryo-postgres" {
 }
 
 locals {
-  consul_ip_address   = data.terraform_remote_state.ryo-service-proxy.outputs.consul_ip_address
   postgres_ip_address = data.terraform_remote_state.ryo-postgres.outputs.postgres_ip_address
 }
 
