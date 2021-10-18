@@ -2,6 +2,9 @@
 ##########################################
 
 module "deploy-matrix-haproxy-backend-services-for-synapse" {
+
+  depends_on = [ lxd_container.synapse ]
+
   source = "../../ryo-service-proxy/module-deployment/modules/deploy-haproxy-backend-services"
 
   non_ssl_backend_services = [ "synapse" ]
