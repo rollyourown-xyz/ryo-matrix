@@ -49,7 +49,6 @@ locals {
 # LXD variables
 locals {
   lxd_host_public_ipv4_address  = yamldecode(file(local.host_configuration))["host_public_ip"]
-  lxd_br0_network_part          = yamldecode(file(local.host_configuration))["lxd_br0_network_part"]
   lxd_host_network_part         = yamldecode(file(local.host_configuration))["lxd_host_network_part"]
 }
 
