@@ -1,9 +1,9 @@
 #!/bin/bash
 
 # Default project software versions
-element_version="1.9.5"
-synapse_version="1.48.0"
-synapse_admin_version="0.8.3"
+element_version="1.9.7"
+synapse_version="1.49.0"
+synapse_admin_version="0.8.4"
 
 # Script directory
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
