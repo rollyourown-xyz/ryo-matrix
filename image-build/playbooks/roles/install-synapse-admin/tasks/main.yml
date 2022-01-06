@@ -2,7 +2,35 @@
 ### See https://github.com/Awesome-Technologies/synapse-admin/blob/master/README.md
 
 
-# Make sure node packages are uninstalled and purged
+# Add yarn repository key
+#
+- name: Add yarn repository key
+  apt_key:
+    url: https://dl.yarnpkg.com/debian/pubkey.gpg
+    state: present
+
+
+# Add yarn packages repository
+#
+- name: Add yarn packages repository
+  apt_repository:
+    repo: 'deb https://dl.yarnpkg.com/debian/ stable main'
+    state: present
+    update_cache: yes
+
+
+# Install npm and yarn packages
+#
+- name: Install npm and yarn
+  apt:
+    name:
+    - npm
+    - yarn
+    update_cache: yes
+    state: present
+
+
+# Uninstall and purge node packages
 #
 - name: Make sure node packages are uninstalled and purged
   apt:
@@ -21,41 +49,12 @@
     state: present
 
 
-
-# Add yarn repository key
-#
-- name: Add yarn repository key
-  apt_key:
-    url: https://dl.yarnpkg.com/debian/pubkey.gpg
-    state: present
-
-
-# Add yarn packages repository
-#
-- name: Add yarn packages repository
-  apt_repository:
-    repo: 'deb https://dl.yarnpkg.com/debian/ stable main'
-    state: present
-    update_cache: yes
-
-
 # Install node.js snap
 #
 - name: Install node snap package
   snap:
     name: node
     classic: yes
-    state: present
-
-
-# Install npm and yarn packages
-#
-- name: Install npm and yarn
-  apt:
-    name:
-    - npm
-    - yarn
-    update_cache: yes
     state: present
 
 
