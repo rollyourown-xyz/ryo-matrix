@@ -41,7 +41,7 @@
 
 # Install node.js snap
 #
-- name: Install certbot snap package
+- name: Install node snap package
   snap:
     name: node
     classic: yes
@@ -50,7 +50,7 @@
 
 # Install npm and yarn packages
 #
-- name: Install node.js npm and yarn
+- name: Install npm and yarn
   apt:
     name:
     - npm
