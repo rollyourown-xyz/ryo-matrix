@@ -33,44 +33,15 @@
     update_cache: yes
 
 
-# Install npm and yarn packages
+# Install nodejs and yarn packages
 #
-- name: Install npm and yarn
+- name: Install nodejs and yarn packages
   apt:
     name:
     - nodejs
-    - npm
     - yarn
     update_cache: yes
     state: present
-
-
-# # Uninstall and purge node packages
-# #
-# - name: Make sure node packages are uninstalled and purged
-#   apt:
-#     name: nodejs
-#     update_cache: no
-#     purge: yes
-#     state: absent
-
-
-# # Make sure snapd is installed
-# #
-# - name: Make sure snapd is installed
-#   apt:
-#     name: snapd
-#     update_cache: yes
-#     state: present
-
-
-# # Install node.js snap
-# #
-# - name: Install node snap package
-#   snap:
-#     name: node
-#     classic: yes
-#     state: present
 
 
 # Ensure git is installed
