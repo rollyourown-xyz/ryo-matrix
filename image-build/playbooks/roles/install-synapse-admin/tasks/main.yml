@@ -28,10 +28,9 @@
 # Add NodeSource packages repository
 - name: NodeSource packages repository
   apt_repository:
-    repo: 'https://deb.nodesource.com/node_16.x focal main'
+    repo: 'deb https://deb.nodesource.com/node_16.x focal main'
     state: present
     update_cache: yes
-
 
 
 # Install npm and yarn packages
