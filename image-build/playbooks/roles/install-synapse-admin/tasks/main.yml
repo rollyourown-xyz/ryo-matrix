@@ -1,6 +1,27 @@
 ---
 ### See https://github.com/Awesome-Technologies/synapse-admin/blob/master/README.md
 
+
+# Make sure node packages are uninstalled and purged
+#
+- name: Make sure node packages are uninstalled and purged
+  apt:
+    name: nodejs
+    update_cache: no
+    purge: yes
+    state: absent
+
+
+# Make sure snapd is installed
+#
+- name: Make sure snapd is installed
+  apt:
+    name: snapd
+    update_cache: yes
+    state: present
+
+
+
 # Add yarn repository key
 #
 - name: Add yarn repository key
@@ -18,12 +39,20 @@
     update_cache: yes
 
 
-# Install node.js, npm and yarn packages
+# Install node.js snap
+#
+- name: Install certbot snap package
+  snap:
+    name: node
+    classic: yes
+    state: present
+
+
+# Install npm and yarn packages
 #
 - name: Install node.js npm and yarn
   apt:
     name:
-    - nodejs
     - npm
     - yarn
     update_cache: yes
