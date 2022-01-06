@@ -5,13 +5,13 @@ module "deploy-matrix-haproxy-backend-services-for-element" {
 
   depends_on = [ lxd_container.element ]
 
-  source = "../../ryo-service-proxy/module-deployment/modules/deploy-haproxy-backend-services"
+  source = "../../ryo-ingress-proxy/module-deployment/modules/deploy-haproxy-backend-services"
 
   non_ssl_backend_services = [ "element" ]
 }
 
 module "deploy-matrix-haproxy-acl-configuration-for-element" {
-  source = "../../ryo-service-proxy/module-deployment/modules/deploy-haproxy-configuration"
+  source = "../../ryo-ingress-proxy/module-deployment/modules/deploy-haproxy-configuration"
 
   depends_on = [ module.deploy-matrix-haproxy-backend-services-for-element ]
 
@@ -21,7 +21,7 @@ module "deploy-matrix-haproxy-acl-configuration-for-element" {
 }
 
 module "deploy-matrix-haproxy-backend-configuration-for-element" {
-  source = "../../ryo-service-proxy/module-deployment/modules/deploy-haproxy-configuration"
+  source = "../../ryo-ingress-proxy/module-deployment/modules/deploy-haproxy-configuration"
 
   depends_on = [ module.deploy-matrix-haproxy-acl-configuration-for-element ]
 

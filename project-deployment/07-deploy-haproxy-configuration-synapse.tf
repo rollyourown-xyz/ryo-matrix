@@ -5,13 +5,13 @@ module "deploy-matrix-haproxy-backend-services-for-synapse" {
 
   depends_on = [ lxd_container.synapse ]
 
-  source = "../../ryo-service-proxy/module-deployment/modules/deploy-haproxy-backend-services"
+  source = "../../ryo-ingress-proxy/module-deployment/modules/deploy-haproxy-backend-services"
 
   non_ssl_backend_services = [ "synapse" ]
 }
 
 module "deploy-matrix-haproxy-acl-configuration-for-synapse" {
-  source = "../../ryo-service-proxy/module-deployment/modules/deploy-haproxy-configuration"
+  source = "../../ryo-ingress-proxy/module-deployment/modules/deploy-haproxy-configuration"
 
   depends_on = [ module.deploy-matrix-haproxy-backend-services-for-synapse ]
 
@@ -23,7 +23,7 @@ module "deploy-matrix-haproxy-acl-configuration-for-synapse" {
 }
 
 module "deploy-matrix-haproxy-deny-configuration-for-synapse" {
-  source = "../../ryo-service-proxy/module-deployment/modules/deploy-haproxy-configuration"
+  source = "../../ryo-ingress-proxy/module-deployment/modules/deploy-haproxy-configuration"
 
   depends_on = [ module.deploy-matrix-haproxy-acl-configuration-for-synapse ]
 
@@ -31,7 +31,7 @@ module "deploy-matrix-haproxy-deny-configuration-for-synapse" {
 }
 
 module "deploy-matrix-haproxy-backend-configuration-for-synapse" {
-  source = "../../ryo-service-proxy/module-deployment/modules/deploy-haproxy-configuration"
+  source = "../../ryo-ingress-proxy/module-deployment/modules/deploy-haproxy-configuration"
 
   depends_on = [ module.deploy-matrix-haproxy-acl-configuration-for-synapse ]
 
