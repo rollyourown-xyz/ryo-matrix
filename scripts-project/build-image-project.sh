@@ -65,5 +65,5 @@ echo "Completed"
 echo ""
 echo "Building synapse-admin image on "$hostname""
 echo "Executing command: packer build -var \"host_id="$hostname"\" -var \"version=$version\" -var \"synapse_admin_version=$synapse_admin_version\" "$SCRIPT_DIR"/../image-build/synapse-admin.pkr.hcl"
-packer build -var "host_id="$hostname"" -var "version=$version" -var "synapse_admin_version=$synapse_admin_version" "$SCRIPT_DIR"/image-build/../synapse-admin.pkr.hcl
+packer build -var "host_id="$hostname"" -var "version=$version" -var "synapse_admin_version=$synapse_admin_version" "$SCRIPT_DIR"/../image-build/synapse-admin.pkr.hcl
 echo "Completed"
