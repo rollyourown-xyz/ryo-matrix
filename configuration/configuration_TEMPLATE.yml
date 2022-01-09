@@ -59,3 +59,18 @@ project_default_locale: en
 # Change the default country code to use when showing country selectors (e.g. with phone number input in
 # element-web). The country code should be an ISO 3166-1 alpha2 country code.
 project_default_country_code: "GB"
+
+# Change the room complexity value in case your server has low resources and you would like to limit the
+# complexity of rooms on remote servers that users on your server are allowed to join
+# The default value is significantly higher than some large rooms on the matrix.org server, so that it
+# should effectively allow users to join almost any remote room.
+# To block users (except for the project admin) from joining the largest rooms, reduce this value to `10`
+# or further to increase the limitation
+# From https://github.com/matrix-org/synapse/blob/develop/docs/sample_config.yaml
+#
+#   Resource-constrained homeserver settings
+#   [...] the room "complexity" will be checked before a user joins a new remote room. If it is above
+#   the complexity limit, the server will disallow joining, or will instantly leave.
+#   Room complexity is an arbitrary measure based on factors such as the number of users in the room.
+# 
+project_matrix_room_complexity: 100

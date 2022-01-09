@@ -97,10 +97,10 @@ admin_contact: "mailto:{{ project_admin_email }}"
 #server_context: context
 
 limit_remote_rooms:
-  #enabled: true
-  #complexity: 0.5
-  #complexity_error: "This room is too complex."
-  #admins_can_join: true
+  enabled: true
+  complexity: {{ project_matrix_room_complexity }}
+  complexity_error: "This room is too complex."
+  admins_can_join: true
 
 #require_membership_for_aliases: false
 
