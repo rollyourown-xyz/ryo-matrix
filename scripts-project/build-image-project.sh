@@ -17,6 +17,7 @@ helpMessage()
   echo "Flags:"
   echo -e "-n hostname \t\t(Mandatory) Name of the host for which to build images"
   echo -e "-v version \t\t(Mandatory) Version stamp to apply to images, e.g. 20210101-1"
+  echo -e "-m mode \t\t(Mandatory) Mode for the project deployment, e.g. standalone"
   echo -e "-h \t\t\tPrint this help message"
   echo ""
   exit 1
@@ -29,17 +30,18 @@ errorMessage()
   exit 1
 }
 
-while getopts n:v:h flag
+while getopts n:v:m:h flag
 do
   case "${flag}" in
     n) hostname=${OPTARG};;
     v) version=${OPTARG};;
+    m) mode=${OPTARG};;
     h) helpMessage ;;
     ?) errorMessage ;;
   esac
 done
 
-if [ -z "$hostname" ] || [ -z "$version" ]
+if [ -z "$hostname" ] || [ -z "$version" ] || [ -z "$mode" ]
 then
   errorMessage
 fi
@@ -62,8 +64,12 @@ packer build -var "host_id="$hostname"" -var "version=$version" -var "synapse_ve
 echo "Completed"
 
 # Synapse-admin webserver
-echo ""
-echo "Building synapse-admin image on "$hostname""
-echo "Executing command: packer build -var \"host_id="$hostname"\" -var \"version=$version\" -var \"synapse_admin_version=$synapse_admin_version\" "$SCRIPT_DIR"/../image-build/synapse-admin.pkr.hcl"
-packer build -var "host_id="$hostname"" -var "version=$version" -var "synapse_admin_version=$synapse_admin_version" "$SCRIPT_DIR"/../image-build/synapse-admin.pkr.hcl
-echo "Completed"
+
+if [ $mode == "standalone" ]
+then
+  echo ""
+  echo "Building synapse-admin image on "$hostname""
+  echo "Executing command: packer build -var \"host_id="$hostname"\" -var \"version=$version\" -var \"synapse_admin_version=$synapse_admin_version\" "$SCRIPT_DIR"/../image-build/synapse-admin.pkr.hcl"
+  packer build -var "host_id="$hostname"" -var "version=$version" -var "synapse_admin_version=$synapse_admin_version" "$SCRIPT_DIR"/../image-build/synapse-admin.pkr.hcl
+  echo "Completed"
+fi
