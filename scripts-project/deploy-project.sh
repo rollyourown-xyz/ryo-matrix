@@ -12,6 +12,7 @@ helpMessage()
   echo "Flags:"
   echo -e "-n hostname \t\t(Mandatory) Name of the host on which to deploy the project"
   echo -e "-v version \t\t(Mandatory) Version stamp for images to deploy, e.g. 20210101-1"
+  echo -e "-m mode \t\t(Mandatory) Mode for the project deployment, e.g. standalone"
   echo -e "-h \t\t\tPrint this help message"
   echo ""
   exit 1
@@ -24,17 +25,18 @@ errorMessage()
   exit 1
 }
 
-while getopts n:v:h flag
+while getopts n:v:m:h flag
 do
   case "${flag}" in
     n) hostname=${OPTARG};;
     v) version=${OPTARG};;
+    m) mode=${OPTARG};;
     h) helpMessage ;;
     ?) errorMessage ;;
   esac
 done
 
-if [ -z "$hostname" ] || [ -z "$version" ]
+if [ -z "$hostname" ] || [ -z "$version" ] || [ -z "$mode" ]
 then
   errorMessage
 fi
@@ -47,21 +49,21 @@ if [ -f ""$SCRIPT_DIR"/../configuration/"$hostname"_workspace_created" ]; then
    echo ""
    echo "Workspace for host "$hostname" already created, switching to workspace"
    echo ""
-   echo "Executing command terraform -chdir="$SCRIPT_DIR"/../project-deployment workspace select "$hostname""
-   terraform -chdir="$SCRIPT_DIR"/../project-deployment workspace select "$hostname"
+   echo "Executing command terraform -chdir="$SCRIPT_DIR"/../project-deployment-"$mode" workspace select "$hostname""
+   terraform -chdir="$SCRIPT_DIR"/../project-deployment-"$mode" workspace select "$hostname"
 else
    echo ""
    echo "Creating workpsace for host "$hostname" and switching to it"
    echo ""
-   echo "Executing command: terraform -chdir="$SCRIPT_DIR"/../project-deployment workspace new "$hostname""
-   terraform -chdir="$SCRIPT_DIR"/../project-deployment workspace new "$hostname"
+   echo "Executing command: terraform -chdir="$SCRIPT_DIR"/../project-deployment-"$mode" workspace new "$hostname""
+   terraform -chdir="$SCRIPT_DIR"/../project-deployment-"$mode" workspace new "$hostname"
    touch "$SCRIPT_DIR"/../configuration/"$hostname"_workspace_created
 fi
 # Deploy
 echo ""
-echo "Executing command: terraform -chdir="$SCRIPT_DIR"/../project-deployment init"
-terraform -chdir="$SCRIPT_DIR"/../project-deployment init
+echo "Executing command: terraform -chdir="$SCRIPT_DIR"/../project-deployment-"$mode" init"
+terraform -chdir="$SCRIPT_DIR"/../project-deployment-"$mode" init
 echo ""
-echo "Executing command: terraform -chdir="$SCRIPT_DIR"/../project-deployment apply -input=false -auto-approve -var \"host_id="$hostname"\" -var \"image_version="$version"\""
-terraform -chdir="$SCRIPT_DIR"/../project-deployment apply -input=false -auto-approve -var "host_id="$hostname"" -var "image_version="$version""
+echo "Executing command: terraform -chdir="$SCRIPT_DIR"/../project-deployment-"$mode" apply -input=false -auto-approve -var \"host_id="$hostname"\" -var \"image_version="$version"\""
+terraform -chdir="$SCRIPT_DIR"/../project-deployment-"$mode" apply -input=false -auto-approve -var "host_id="$hostname"" -var "image_version="$version""
 echo "Completed"
