@@ -37,7 +37,7 @@ project_admin_password: <PASSWORD>
 project_admin_email: <EMAIL ADDRESS>
 
 # SMTP Server settings
-# An email server account is needed for sending user account emails (e.g. password reset) to 
+# An email server account is needed for sending user account emails (e.g. notifications) to 
 # users of the matrix server deployed by the project. The parameters for the SMTP server should
 # be available from your domain and email hosting provider
 project_smtp_server: <SMTP SERVER NAME>
@@ -74,3 +74,44 @@ project_default_country_code: "GB"
 #   Room complexity is an arbitrary measure based on factors such as the number of users in the room.
 # 
 project_matrix_room_complexity: 100
+
+
+
+#-----------------------
+# Optional Configuration
+#-----------------------
+
+# Single Sign-On mode
+#--------------------
+
+# Identity provider selection for single sign-on (SSO)
+# Change this parameter to select an external Identity and Access Management system for Matrix users.
+# Depending on the choice here, add the respective variable configuration below.
+# This variable **must** be set to one of the following values. Currently supported are:
+#   - standalone  - no external IAM will be used. User accounts will be added to synapse directly
+#                   via synapse-admin
+#   - gitea       - a Gitea server will be used for IAM. User accounts are added to the Gitea
+#                   server. Synapse users are authenticated via the Gitea server login.
+#                   The ryo-gitea-standalone project should be deployed to the host server **before**
+#                   deploying this project
+project_idp_mode: standalone
+
+
+# Single Sign-On - standalone mode
+#---------------------------------
+
+# There are no specific configuration parameters for this mode
+
+
+# Single Sign-On - gitea mode
+#----------------------------
+
+# Set the Gitea server domain to be used for the project - for example git.{{project_domain_name}}
+# This should be the domain configured in the ryo-gitea-standalone configuration
+project_idp_gitea_domain_name: <SUBDOMAIN>.<DOMAIN>
+
+# Add an OAuth2 application from the Gitea administrator account
+# (configured in the ryo-gitea-standalone project)
+# Add the Client ID and Client Secret provided by Gitea during this process here
+project_idp_gitea_client_id: <CLIENT-ID>
+project_idp_gitea_client_secret: <CLIENT-SECRET>
