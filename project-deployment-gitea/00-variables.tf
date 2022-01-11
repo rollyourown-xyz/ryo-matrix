@@ -69,10 +69,3 @@ data "terraform_remote_state" "ryo-postgres" {
 locals {
   postgres_ip_address = data.terraform_remote_state.ryo-postgres.outputs.postgres_ip_address
 }
-
-# Output variable definitions
-
-output "synapse-admin_ip_address" {
-    description = "IP Address of the synapse-admin container"
-    value       = lxd_container.synapse-admin.ip_address
-}
