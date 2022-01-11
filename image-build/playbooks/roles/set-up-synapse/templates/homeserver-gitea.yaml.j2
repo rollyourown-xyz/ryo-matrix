@@ -1,0 +1,836 @@
+# Configuration file for Synapse.
+
+############
+## Server ##
+############
+
+pid_file: "/var/run/matrix-synapse.pid"
+
+#web_client_location: "https://element.{{ project_domain_name }}/"
+
+public_baseurl: "https://matrix.{{ project_domain_name }}/"
+
+#soft_file_limit: 0
+
+presence:
+  enabled: false
+
+require_auth_for_profile_requests: true
+
+#limit_profile_requests_to_users_who_share_rooms: true
+
+include_profile_data_on_invite: false
+
+allow_public_rooms_without_auth: false
+
+allow_public_rooms_over_federation: false
+
+#default_room_version: "6"
+
+#gc_thresholds: [700, 10, 10]
+
+#gc_min_interval: [0.5s, 30s, 1m]
+
+#filter_timeline_limit: 5000
+
+#block_non_admin_invites: true
+
+#enable_search: false
+
+#ip_range_blacklist:
+#  - '127.0.0.0/8'
+#  - '10.0.0.0/8'
+#  - '172.16.0.0/12'
+#  - '192.168.0.0/16'
+#  - '100.64.0.0/10'
+#  - '192.0.0.0/24'
+#  - '169.254.0.0/16'
+#  - '192.88.99.0/24'
+#  - '198.18.0.0/15'
+#  - '192.0.2.0/24'
+#  - '198.51.100.0/24'
+#  - '203.0.113.0/24'
+#  - '224.0.0.0/4'
+#  - '::1/128'
+#  - 'fe80::/10'
+#  - 'fc00::/7'
+#  - '2001:db8::/32'
+#  - 'ff00::/8'
+#  - 'fec0::/10'
+
+#ip_range_whitelist:
+#   - '192.168.1.1'
+
+listeners:
+  - port: 8008
+    tls: false
+    type: http
+    x_forwarded: true
+    bind_addresses: ['0.0.0.0']
+
+    resources:
+      - names: [client, federation]
+        compress: false
+
+#dummy_events_threshold: 5
+
+admin_contact: "mailto:{{ project_admin_email }}"
+
+#hs_disabled: false
+
+#hs_disabled_message: 'Human readable reason for why the HS is blocked'
+
+#limit_usage_by_mau: false
+
+#max_mau_value: 50
+
+#mau_trial_days: 2
+
+#mau_limit_alerting: false
+
+#mau_stats_only: false
+
+#mau_limit_reserved_threepids:
+#  - medium: 'email'
+#    address: 'reserved_user@example.com'
+
+#server_context: context
+
+limit_remote_rooms:
+  enabled: true
+  complexity: {{ project_matrix_room_complexity }}
+  complexity_error: "This room is too complex."
+  admins_can_join: true
+
+#require_membership_for_aliases: false
+
+#allow_per_room_profiles: false
+
+#redaction_retention_period: 28d
+
+#user_ips_max_age: 14d
+
+retention:
+  #enabled: true
+  #default_policy:
+  #  min_lifetime: 1d
+  #  max_lifetime: 1y
+  #allowed_lifetime_min: 1d
+  #allowed_lifetime_max: 1y
+  #purge_jobs:
+  #  - longest_max_lifetime: 3d
+  #    interval: 12h
+  #  - shortest_max_lifetime: 3d
+  #    interval: 1d
+
+request_token_inhibit_3pid_errors: true
+
+#next_link_domain_whitelist: ["matrix.org"]
+
+templates:
+  #custom_template_directory: /path/to/custom/templates/
+
+#tls_certificate_path: "/etc/matrix-synapse/SERVERNAME.tls.crt"
+
+#tls_private_key_path: "/etc/matrix-synapse/SERVERNAME.tls.key"
+
+#federation_verify_certificates: false
+
+#federation_client_minimum_tls_version: 1.2
+
+#federation_certificate_verification_whitelist:
+#  - lon.example.com
+#  - *.domain.com
+#  - *.onion
+
+#federation_custom_ca_list:
+#  - myCA1.pem
+#  - myCA2.pem
+#  - myCA3.pem
+
+
+################
+## Federation ##
+################
+
+#federation_domain_whitelist:
+#  - lon.example.com
+#  - nyc.example.com
+#  - syd.example.com
+
+#federation_metrics_domains:
+#  - matrix.org
+#  - example.com
+
+allow_profile_lookup_over_federation: false
+
+
+#############
+## Caching ##
+#############
+
+#event_cache_size: 10K
+
+caches:
+   #global_factor: 1.0
+   per_cache_factors:
+     #get_users_who_share_room_with_user: 2.0
+
+#expiry_time: 30m
+
+#sync_response_cache_duration: 2m
+
+
+##############
+## Database ##
+##############
+
+database:
+  name: "psycopg2"
+  txn_limit: 10000
+  args:
+    user: "synapse_user"
+    password: "{{ postgres_synapse_user_password }}"
+    database: "synapse"
+    host: "postgres.service.ryo"
+    port: "5432"
+    cp_min: 5
+    cp_max: 10
+
+
+#############
+## Logging ##
+#############
+
+log_config: "/etc/matrix-synapse/log.yaml"
+
+
+##################
+## Ratelimiting ##
+##################
+
+#rc_message:
+#  per_second: 0.2
+#  burst_count: 10
+
+#rc_registration:
+#  per_second: 0.17
+#  burst_count: 3
+
+#rc_registration_token_validity:
+#  per_second: 0.1
+#  burst_count: 5
+
+#rc_login:
+#  address:
+#    per_second: 0.17
+#    burst_count: 3
+#  account:
+#    per_second: 0.17
+#    burst_count: 3
+#  failed_attempts:
+#    per_second: 0.17
+#    burst_count: 3
+
+#rc_admin_redaction:
+#  per_second: 1
+#  burst_count: 50
+
+#rc_joins:
+#  local:
+#    per_second: 0.1
+#    burst_count: 3
+#  remote:
+#    per_second: 0.01
+#    burst_count: 3
+
+#rc_3pid_validation:
+#  per_second: 0.003
+#  burst_count: 5
+
+#rc_invites:
+#  per_room:
+#    per_second: 0.3
+#    burst_count: 10
+#  per_user:
+#    per_second: 0.003
+#    burst_count: 5
+
+#rc_federation:
+#  window_size: 1000
+#  sleep_limit: 10
+#  sleep_delay: 500
+#  reject_limit: 50
+#  concurrent: 3
+
+#federation_rr_transactions_per_room_per_second: 50
+
+
+#################
+## Media Store ##
+#################
+
+#enable_media_repo: false
+
+media_store_path: "/var/lib/matrix-synapse/media"
+
+#media_storage_providers:
+#  - module: file_system
+#    store_local: false
+#    store_remote: false
+#    store_synchronous: false
+#    config:
+#       directory: /mnt/some/other/directory
+
+#max_upload_size: 50M
+
+#max_image_pixels: 32M
+
+#dynamic_thumbnails: false
+
+#thumbnail_sizes:
+#  - width: 32
+#    height: 32
+#    method: crop
+#  - width: 96
+#    height: 96
+#    method: crop
+#  - width: 320
+#    height: 240
+#    method: scale
+#  - width: 640
+#    height: 480
+#    method: scale
+#  - width: 800
+#    height: 600
+#    method: scale
+
+url_preview_enabled: true
+
+url_preview_ip_range_blacklist:
+  - '127.0.0.0/8'
+  - '10.0.0.0/8'
+  - '172.16.0.0/12'
+  - '192.168.0.0/16'
+  - '100.64.0.0/10'
+  - '192.0.0.0/24'
+  - '169.254.0.0/16'
+  - '192.88.99.0/24'
+  - '198.18.0.0/15'
+  - '192.0.2.0/24'
+  - '198.51.100.0/24'
+  - '203.0.113.0/24'
+  - '224.0.0.0/4'
+  - '::1/128'
+  - 'fe80::/10'
+  - 'fc00::/7'
+  - '2001:db8::/32'
+  - 'ff00::/8'
+  - 'fec0::/10'
+
+#url_preview_ip_range_whitelist:
+#   - '192.168.1.1'
+
+url_preview_url_blacklist:
+ - username: '*'
+ - netloc: 'google.com'
+ - netloc: '*.google.com'
+ - scheme: 'http'
+ - netloc: '^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$'
+
+max_spider_size: 10M
+
+url_preview_accept_language:
+   - en-UK
+   - de
+   - en-US;q=0.9
+   - es;q=0.8
+   - fr;q=0.7
+   - "*;q=0.6"
+
+
+#############
+## Captcha ##
+#############
+
+#recaptcha_public_key: "YOUR_PUBLIC_KEY"
+
+#recaptcha_private_key: "YOUR_PRIVATE_KEY"
+
+#enable_registration_captcha: true
+
+#recaptcha_siteverify_api: "https://my.recaptcha.site"
+
+
+##########
+## TURN ##
+##########
+
+turn_uris: [ "turn:{{ project_coturn_domain_name }}:3478?transport=udp", "turn:{{ project_coturn_domain_name }}:3478?transport=tcp" ]
+
+turn_shared_secret: "{{ coturn_static_auth_secret }}"
+
+#turn_username: "TURNSERVER_USERNAME"
+
+#turn_password: "TURNSERVER_PASSWORD"
+
+turn_user_lifetime: 2h
+
+turn_allow_guests: false
+
+
+##################
+## Registration ##
+##################
+
+enable_registration: false
+
+#session_lifetime: 24h
+
+#registrations_require_3pid:
+#  - email
+#  - msisdn
+
+#disable_msisdn_registration: true
+
+#allowed_local_3pids:
+#  - medium: email
+#    pattern: '.*@matrix\.org'
+#  - medium: email
+#    pattern: '.*@vector\.im'
+#  - medium: msisdn
+#    pattern: '\+49'
+
+#enable_3pid_lookup: true
+
+#registration_requires_token: true
+
+registration_shared_secret: "{{ synapse_registration_shared_secret }}"
+
+#bcrypt_rounds: 12
+
+allow_guest_access: false
+
+#default_identity_server: "https://matrix.org"
+
+account_threepid_delegates:
+    #email: https://example.com     # Delegate email sending to example.com
+    #msisdn: http://localhost:8090  # Delegate SMS sending to this local process
+
+#enable_set_displayname: false
+
+#enable_set_avatar_url: false
+
+#enable_3pid_changes: false
+
+#auto_join_rooms:
+#  - "#example:example.com"
+
+#autocreate_auto_join_rooms: false
+
+#autocreate_auto_join_rooms_federated: false
+
+#autocreate_auto_join_room_preset: private_chat
+
+#auto_join_mxid_localpart: system
+
+#auto_join_rooms_for_guests: false
+
+
+##############
+## Metrics ###
+##############
+
+enable_metrics: false
+
+#sentry:
+#    dsn: "..."
+
+metrics_flags:
+    # Publish synapse_federation_known_servers, a gauge of the number of
+    # servers this homeserver knows about, including itself. May cause
+    # performance problems on large homeservers.
+    #
+    #known_servers: true
+
+report_stats: true
+
+#report_stats_endpoint: https://example.com/report-usage-stats/push
+
+
+#######################
+## API Configuration ##
+#######################
+
+room_prejoin_state:
+   #- m.room.join_rules
+   #- m.room.canonical_alias
+   #- m.room.avatar
+   #- m.room.encryption
+   #- m.room.name
+   #- m.room.create
+   #disable_default_event_types: true
+   #additional_event_types:
+   #  - org.example.custom.event.type
+
+#app_service_config_files:
+#  - app_service_1.yaml
+#  - app_service_2.yaml
+
+#track_appservice_user_ips: true
+
+#macaroon_secret_key: <PRIVATE STRING>
+
+#form_secret: <PRIVATE STRING>
+
+
+##################
+## Signing Keys ##
+##################
+
+signing_key_path: "/etc/matrix-synapse/homeserver.signing.key"
+
+old_signing_keys:
+
+#key_refresh_interval: 1d
+
+trusted_key_servers:
+  - server_name: "matrix.org"
+
+suppress_key_server_warning: true
+
+#key_server_signing_keys_path: "key_server_signing_keys.key"
+
+
+################################
+## Single sign-on integration ##
+################################
+
+saml2_config:
+  sp_config:
+    #metadata:
+    #  local: ["saml2/idp.xml"]
+    #  remote:
+    #    - url: https://our_idp/metadata.xml
+
+    #accepted_time_diff: 3
+
+    #service:
+    #  sp:
+    #    allow_unsolicited: true
+
+    #description: ["My awesome SP", "en"]
+
+    #name: ["Test SP", "en"]
+
+    #ui_info:
+    #  display_name:
+    #    - lang: en
+    #      text: "Display Name is the descriptive name of your service."
+    #  description:
+    #    - lang: en
+    #      text: "Description should be a short paragraph explaining the purpose of the service."
+    #  information_url:
+    #    - lang: en
+    #      text: "https://example.com/terms-of-service"
+    #  privacy_statement_url:
+    #    - lang: en
+    #      text: "https://example.com/privacy-policy"
+    #  keywords:
+    #    - lang: en
+    #      text: ["Matrix", "Element"]
+    #  logo:
+    #    - lang: en
+    #      text: "https://example.com/logo.svg"
+    #      width: "200"
+    #      height: "80"
+
+    #organization:
+    #  name: Example com
+    #  display_name:
+    #    - ["Example co", "en"]
+    #  url: "http://example.com"
+
+    #contact_person:
+    #  - given_name: Bob
+    #    sur_name: "the Sysadmin"
+    #    email_address": ["admin@example.com"]
+    #    contact_type": technical
+
+  #config_path: "/etc/matrix-synapse/sp_conf.py"
+
+  #saml_session_lifetime: 5m
+
+  user_mapping_provider:
+    #module: mapping_provider.SamlMappingProvider
+    config:
+      #mxid_source_attribute: displayName
+      #mxid_mapping: dotreplace
+
+  #grandfathered_mxid_source_attribute: upn
+
+  #attribute_requirements:
+  #  - attribute: userGroup
+  #    value: "staff"
+  #  - attribute: department
+  #    value: "sales"
+
+  #idp_entityid: 'https://our_idp/entityid'
+
+
+oidc_providers:
+  - idp_id: "gitea"
+    idp_name: "{{ project_domain_name }} sign-in"
+    issuer: "https://{{ project_idp_gitea_domain_name }}/"
+    discover: false
+    authorization_endpoint: "https://{{ project_idp_gitea_domain_name }}/login/oauth/authorize"
+    token_endpoint: "https://{{ project_idp_gitea_domain_name }}/login/oauth/access_token"
+    userinfo_endpoint: "https://{{ project_idp_gitea_domain_name }}/api/v1/user"
+    client_id: "{{ project_idp_gitea_client_id }}"
+    client_secret: "{{ project_idp_gitea_client_secret }}"
+    scopes: [ ]
+    allow_existing_users: true
+    user_mapping_provider:
+      config:
+        subject_claim: "id"
+        localpart_template: "{{ '{{' }} user.login {{ '}}' }}"
+        display_name_template: "{{ '{{' }} user.full_name {{ '}}' }}"
+
+
+cas_config:
+  #enabled: true
+  #server_url: "https://cas-server.com"
+  #service_url: "https://homeserver.domain.com:8448"
+  #displayname_attribute: name
+  #required_attributes:
+  #  userGroup: "staff"
+  #  department: None
+
+
+sso:
+    client_whitelist:
+      - "https://element.{{ project_domain_name }}/"
+    #update_profile_information: true
+
+
+#jwt_config:
+    #enabled: true
+    #secret: "provided-by-your-issuer"
+    #algorithm: "provided-by-your-issuer"
+    #issuer: "provided-by-your-issuer"
+    #audiences:
+    #    - "provided-by-your-issuer"
+
+
+password_config:
+   enabled: false
+   #localdb_enabled: false
+   #pepper: "EVEN_MORE_SECRET"
+   policy:
+      #enabled: true
+      #minimum_length: 15
+      #require_digit: true
+      #require_symbol: true
+      #require_lowercase: true
+      #require_uppercase: true
+
+
+ui_auth:
+    #session_timeout: "15s"
+
+
+##################################################
+# Configuration for sending emails from Synapse ##
+##################################################
+
+email:
+  smtp_host: "{{ project_smtp_server }}"
+  smtp_port: {{ project_smtp_server_port }}
+  smtp_user: "{{ project_smtp_server_username }}"
+  smtp_pass: "{{ project_smtp_server_password }}"
+  require_transport_security: {{ project_smtp_server_starttls }}
+  enable_tls: {{ project_smtp_server_ssl }}
+  notif_from: "Your %(app)s homeserver <noreply@{{ project_domain_name }}>"
+  app_name: "{{ project_domain_name }}"
+  #enable_notifs: true
+  #notif_for_new_users: false
+  client_base_url: "https://element.{{ project_domain_name }}"
+  validation_token_lifetime: 15m
+  #invite_client_location: https://app.element.io
+  #subjects:
+    #message_from_person_in_room: "[%(app)s] You have a message on %(app)s from %(person)s in the %(room)s room..."
+    #message_from_person: "[%(app)s] You have a message on %(app)s from %(person)s..."
+    #messages_from_person: "[%(app)s] You have messages on %(app)s from %(person)s..."
+    #messages_in_room: "[%(app)s] You have messages on %(app)s in the %(room)s room..."
+    #messages_in_room_and_others: "[%(app)s] You have messages on %(app)s in the %(room)s room and others..."
+    #messages_from_person_and_others: "[%(app)s] You have messages on %(app)s from %(person)s and others..."
+    #invite_from_person_to_room: "[%(app)s] %(person)s has invited you to join the %(room)s room on %(app)s..."
+    #invite_from_person: "[%(app)s] %(person)s has invited you to chat on %(app)s..."
+    #password_reset: "[%(server_name)s] Password reset"
+    #email_validation: "[%(server_name)s] Validate your email"
+
+
+#######################
+# Password providers ##
+#######################
+
+password_providers:
+#    - module: "ldap_auth_provider.LdapAuthProvider"
+#      config:
+#        enabled: true
+#        uri: "ldap://ldap.example.com:389"
+#        start_tls: true
+#        base: "ou=users,dc=example,dc=com"
+#        attributes:
+#           uid: "cn"
+#           mail: "email"
+#           name: "givenName"
+#        #bind_dn:
+#        #bind_password:
+#        #filter: "(objectClass=posixAccount)"
+
+
+##########
+## Push ##
+##########
+
+push:
+  include_content: false
+  #group_unread_count_by_room: false
+
+
+###########
+## Rooms ##
+###########
+
+encryption_enabled_by_default_for_room_type: invite
+
+#enable_group_creation: true
+
+#group_creation_prefix: "unofficial/"
+
+
+#################################
+# User Directory configuration ##
+#################################
+
+user_directory:
+  enabled: true
+  search_all_users: true
+  prefer_local_users: true
+
+
+###############################
+# User Consent configuration ##
+###############################
+
+#user_consent:
+#  template_dir: res/templates/privacy
+#  version: 1.0
+#  server_notice_content:
+#    msgtype: m.text
+#    body: >-
+#      To continue using this homeserver you must review and agree to the
+#      terms and conditions at %(consent_uri)s
+#  send_server_notice_to_guests: true
+#  block_events_error: >-
+#    To continue using this homeserver you must review and agree to the
+#    terms and conditions at %(consent_uri)s
+#  require_at_registration: false
+#  policy_name: Privacy Policy
+
+
+#################################
+## Local statistics collection ##
+#################################
+
+stats:
+#   enabled: false
+
+
+#######################################
+## Server Notices room configuration ##
+#######################################
+
+server_notices:
+  system_mxid_localpart: notices
+  system_mxid_display_name: "Server Notices"
+  #system_mxid_avatar_url: "mxc://server.com/oumMVlgDnLYFaPVkExemNVVZ"
+  room_name: "Server Notices"
+
+
+############################################
+## Disable searching the public room list ##
+############################################
+
+#enable_room_list_search: false
+
+
+#############
+## Aliases ##
+#############
+
+#alias_creation_rules:
+#  - user_id: "*"
+#    alias: "*"
+#    room_id: "*"
+#    action: allow
+
+
+############################
+## Rooms list publication ##
+############################
+
+#room_list_publication_rules:
+#  - user_id: "*"
+#    alias: "*"
+#    room_id: "*"
+#    action: allow
+
+
+#################
+## Opentracing ##
+#################
+
+opentracing:
+    #enabled: true
+    #homeserver_whitelist:
+    #  - ".*"
+    #force_tracing_for_users:
+    #  - "@user1:server_name"
+    #  - "@user2:server_name"
+    #jaeger_config:
+    #  sampler:
+    #    type: const
+    #    param: 1
+    #  logging:
+    #    false
+
+
+#############
+## Workers ##
+#############
+
+#send_federation: false
+
+#federation_sender_instances:
+#  - federation_sender1
+
+#instance_map:
+#  worker1:
+#    host: localhost
+#    port: 8034
+
+#stream_writers:
+#  events: worker1
+#  typing: worker1
+
+#run_background_tasks_on: worker1
+
+#worker_replication_secret: ""
+
+redis:
+  #enabled: true
+  #host: localhost
+  #port: 6379
+  #password: <secret_password>
