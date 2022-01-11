@@ -1,0 +1,5 @@
+#cloud-config
+package_upgrade: false
+runcmd:
+  # Bootstrap synapse
+  - /usr/local/bin/synapse-bootstrap.sh
