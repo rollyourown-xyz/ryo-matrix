@@ -92,7 +92,7 @@ project_matrix_room_complexity: 100
 #                   via synapse-admin
 #   - gitea       - a Gitea server will be used for IAM. User accounts are added to the Gitea
 #                   server. Synapse users are authenticated via the Gitea server login.
-#                   The ryo-gitea-standalone project should be deployed to the host server **before**
+#                   The ryo-gitea project should be deployed to the host server **before**
 #                   deploying this project
 project_idp_mode: standalone
 
@@ -107,11 +107,11 @@ project_idp_mode: standalone
 #----------------------------
 
 # Set the Gitea server domain to be used for the project - for example git.{{project_domain_name}}
-# This should be the domain configured in the ryo-gitea-standalone configuration
+# This should be the domain configured in the ryo-gitea configuration
 project_idp_gitea_domain_name: <SUBDOMAIN>.<DOMAIN>
 
 # Add an OAuth2 application from the Gitea administrator account
-# (configured in the ryo-gitea-standalone project)
+# (configured in the ryo-gitea project)
 # Add the Client ID and Client Secret provided by Gitea during this process here
 project_idp_gitea_client_id: <CLIENT-ID>
 project_idp_gitea_client_secret: <CLIENT-SECRET>
