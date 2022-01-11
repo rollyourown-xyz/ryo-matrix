@@ -11,7 +11,7 @@
 
 # The project ID must be 15 characters or less and should be unique amongst
 # projects
-project_id: ryo-matrix-standalone
+project_id: ryo-matrix
 
 # Set the domain to be used for the project. The DNS A record for the project's 
 # domain must be set to point to the public IPv4 address of your host server
