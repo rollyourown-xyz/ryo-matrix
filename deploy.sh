@@ -3,17 +3,8 @@
 # deploy.sh
 # This script deploys the modules required for the project and the project components 
 
-# Project ID
-PROJECT_ID="ryo-matrix"
-
 # Required modules (space-separated list in the form "module_1 module_2 module_3")
 MODULES="ryo-ingress-proxy ryo-postgres ryo-coturn ryo-wellknown"
-
-# Script directory
-SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
-
-# Info
-echo "rollyourown.xyz deployment script for "$PROJECT_ID""
 
 
 # Help and error messages
@@ -55,6 +46,31 @@ done
 if [ -z "$hostname" ] || [ -z "$version" ]; then
   errorMessage
 fi
+
+
+# Script directory
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+
+# Get Project ID from configuration file
+PROJECT_ID="$(yq eval '.project_id' "$SCRIPT_DIR"/configuration/configuration_"$hostname".yml)"
+
+# Get Project IdP mode from configuration file
+PROJECT_IDP_MODE="$(yq eval '.project_idp_mode' "$SCRIPT_DIR"/configuration/configuration_"$hostname".yml)"
+
+modeErrorMessage()
+{
+  echo "Invalid IdP mode \""$PROJECT_IDP_MODE"\". Please check configuration."
+  exit 1
+}
+
+# Check IdP mode in configuration is supported
+if [ ! "$PROJECT_IDP_MODE" == "standalone" ] && [ ! "$PROJECT_IDP_MODE" == "gitea" ]; then
+  modeErrorMessage
+fi
+
+
+# Info
+echo "rollyourown.xyz deployment script for "$PROJECT_ID""
 
 
 # Update project repository
@@ -175,12 +191,12 @@ echo ""
 echo "Running project-specific host setup for "$PROJECT_ID" on "$hostname""
 /bin/bash "$SCRIPT_DIR"/scripts-project/host-setup-project.sh -n "$hostname"
 
-# Build project images
+# Build project images for the configured IdP mode
 echo ""
-echo "Running image build for "$PROJECT_ID" on "$hostname""
-/bin/bash "$SCRIPT_DIR"/scripts-project/build-image-project.sh -n "$hostname" -v "$version"
+echo "Running image build for "$PROJECT_ID" on "$hostname" in IdP mode "$PROJECT_IDP_MODE""
+/bin/bash "$SCRIPT_DIR"/scripts-project/build-image-project.sh -n "$hostname" -v "$version" -m "$PROJECT_IDP_MODE"
 
-# Deploy project containers
+# Deploy project containers for the configured IdP mode
 echo ""
-echo "Deploying "$PROJECT_ID" on "$hostname""
-/bin/bash "$SCRIPT_DIR"/scripts-project/deploy-project.sh -n "$hostname" -v "$version"
+echo "Deploying "$PROJECT_ID" on "$hostname" in IdP mode "$PROJECT_IDP_MODE""
+/bin/bash "$SCRIPT_DIR"/scripts-project/deploy-project.sh -n "$hostname" -v "$version" -m "$PROJECT_IDP_MODE"
