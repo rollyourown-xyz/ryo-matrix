@@ -235,7 +235,7 @@
     dest: /usr/local/bootstrap/homeserver.yaml
     src: homeserver-standalone.yaml.j2
     force: yes
-  when: project_idp == "standalone"
+  when: project_idp_mode == "standalone"
 
 
 # Copy homeserver-gitea.yaml configuration file to bootstrapping directory (for gitea IAM mode)
@@ -248,7 +248,7 @@
     dest: /usr/local/bootstrap/homeserver.yaml
     src: homeserver-gitea.yaml.j2
     force: yes
-  when: project_idp == "gitea"
+  when: project_idp_mode == "gitea"
 
 
 # Copy log.yaml configuration file to bootstrapping directory
