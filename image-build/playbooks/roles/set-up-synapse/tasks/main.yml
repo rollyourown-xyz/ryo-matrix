@@ -48,6 +48,54 @@
   when: not postgres_synapse_user_password_file.stat.exists
 
 
+# Check existence of a previously generated synapse oidc client secret for the host
+#
+- name: Check existence of a previously generated synapse oidc client secret for the host
+  delegate_to: localhost
+  stat:
+    path: "{{ playbook_dir }}/../../configuration/synapse_oidc_client_secret_{{ host_id }}.yml"
+  register: synapse_oidc_client_secret_file
+
+
+# Load the synapse oidc client secret from previously created file (if previously generated)
+#
+- name: Load the synapse oidc client secret from previously created file
+  include_vars:
+    file: "{{ playbook_dir }}/../../configuration/synapse_oidc_client_secret_{{ host_id }}.yml"
+  when: synapse_oidc_client_secret_file.stat.exists
+
+
+# Generate a random string as synapse oidc client secret (if not previously generated)
+#
+- name: Generate a random string as synapse oidc client secret
+  shell: "tr -dc A-Za-z0-9 </dev/urandom | head -c 24"
+  register: synapse_oidc_client_secret_stdout
+  when: not synapse_oidc_client_secret_file.stat.exists
+
+
+# Assign the synapse oidc client secret to the variable synapse_oidc_client_secret (if not previously generated)
+#
+- name: Assign the synapse oidc client secret to the variable synapse_oidc_client_secret
+  set_fact:
+    synapse_oidc_client_secret: "{{ synapse_oidc_client_secret_stdout.stdout }}"
+  when: not synapse_oidc_client_secret_file.stat.exists
+
+
+# Write the synapse oidc client secret to a file in the module configuration directory on the local machine (if not previously generated)
+#
+- name: Write the synapse oidc client secret to a file in the module configuration directory
+  delegate_to: localhost
+  template:
+    mode: 0640
+    owner: "{{ local_non_root_user }}"
+    group: "{{ local_non_root_user }}"
+    dest: "{{ playbook_dir }}/../../configuration/synapse_oidc_client_secret_{{ host_id }}.yml"
+    src: synapse_oidc_client_secret.yml.j2
+    force: yes
+    backup: yes
+  when: not synapse_oidc_client_secret_file.stat.exists
+
+
 # Check existence of a previously generated synapse registration shared secret for the host
 #
 - name: Check existence of a previously generated synapse registration shared secret for the host
@@ -177,16 +225,30 @@
     force: yes
 
 
-# Copy homeserver.yaml configuration file to bootstrapping directory
+# Copy homeserver-standalone.yaml configuration file to bootstrapping directory (for standalone IAM mode)
 #
-- name: Push homeserver.yaml configuration file
+- name: Push homeserver.yaml configuration file (for standalone IAM mode)
   template:
     mode: 0644
     owner: root
     group: root
     dest: /usr/local/bootstrap/homeserver.yaml
-    src: homeserver.yaml.j2
+    src: homeserver-standalone.yaml.j2
     force: yes
+  when: project_idp == "standalone"
+
+
+# Copy homeserver-gitea.yaml configuration file to bootstrapping directory (for gitea IAM mode)
+#
+- name: Push homeserver.yaml configuration file (for gitea IAM mode)
+  template:
+    mode: 0644
+    owner: root
+    group: root
+    dest: /usr/local/bootstrap/homeserver.yaml
+    src: homeserver-gitea.yaml.j2
+    force: yes
+  when: project_idp == "gitea"
 
 
 # Copy log.yaml configuration file to bootstrapping directory
