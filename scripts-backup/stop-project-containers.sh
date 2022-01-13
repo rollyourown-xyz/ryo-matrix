@@ -56,7 +56,7 @@ lxc stop "$hostname":element
 echo ""
 
 echo "Stopping synapse container - Executing command: lxc stop "$hostname":synapse"
-lxc stop "$hostname":element
+lxc stop "$hostname":synapse
 echo ""
 
 echo "Project containers stopped"

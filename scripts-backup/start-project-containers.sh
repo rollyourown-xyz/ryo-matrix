@@ -56,7 +56,7 @@ lxc start "$hostname":element
 echo ""
 
 echo "Starting synapse container - Executing command: lxc start "$hostname":synapse"
-lxc start "$hostname":element
+lxc start "$hostname":synapse
 echo ""
 
 echo "Project containers started"
