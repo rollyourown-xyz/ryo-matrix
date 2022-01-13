@@ -34,7 +34,7 @@ do
   esac
 done
 
-if [ -z "$module" ]
+if [ -z "$hostname" ] ||  [ -z "$mode" ]
 then
   errorMessage
 fi
