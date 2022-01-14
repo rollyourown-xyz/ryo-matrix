@@ -32,7 +32,7 @@ do
   esac
 done
 
-if [ -z "$hostname" ] ||  [ -z "$mode" ]
+if [ -z "$hostname" ]
 then
   errorMessage
 fi
