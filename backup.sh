@@ -15,7 +15,7 @@ helpMessage()
   echo "backup.sh: Back up project container persistent storage from the host to the control node"
   echo ""
   echo "Help: backup.sh"
-  echo "Usage: ./backup.sh -n hostname -m mode"
+  echo "Usage: ./backup.sh -n hostname"
   echo "Flags:"
   echo -e "-n hostname \t\t(Mandatory) Name of the host from which to back up project container persistent storage"
   echo -e "-h \t\t\tPrint this help message"
