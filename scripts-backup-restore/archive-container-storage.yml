@@ -21,10 +21,18 @@
     transfer_method: scp  
   
   tasks:
+
     - name: Archive persistent storage for {{ project_id }} containers on {{ host_id }}
       archive:
-        path: /var/containers/{{ project_id }}
-        dest: /tmp/{{ host_id }}-{{ project_id }}-{{ ansible_date_time['date'] }}-{{ ansible_date_time['hour'] }}{{ ansible_date_time['minute'] }}{{ ansible_date_time['second'] }}.zip
+        path: "/var/containers/{{ project_id }}"
+        dest: "/tmp/backup-{{ host_id }}-{{ project_id }}-{{ ansible_date_time['date'] }}-{{ ansible_date_time['hour'] }}{{ ansible_date_time['minute'] }}{{ ansible_date_time['second'] }}.zip"
         remove: no
         format: zip
         force_archive: yes
+
+    - name: Copy persistent storage archive for {{ project_id }} containers on {{ host_id }} to control node
+      fetch:
+        src: "/tmp/backup-{{ host_id }}-{{ project_id }}-{{ ansible_date_time['date'] }}-{{ ansible_date_time['hour'] }}{{ ansible_date_time['minute'] }}{{ ansible_date_time['second'] }}.zip"
+        dest: "{{ playbook_dir }}/backups/"
+        flat: yes
+      
