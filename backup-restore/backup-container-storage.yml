@@ -1,5 +1,5 @@
 ---
-- name: Backup persistent storage for {{ project_id }} containers on {{ host_id }}
+- name: Back up persistent storage for {{ project_id }} containers on {{ host_id }}
   hosts: host_wireguard_ip
   
   vars_files:
