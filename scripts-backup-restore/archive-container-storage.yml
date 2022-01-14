@@ -35,4 +35,8 @@
         src: "/tmp/backup-{{ host_id }}-{{ project_id }}-{{ ansible_date_time['date'] }}-{{ ansible_date_time['hour'] }}{{ ansible_date_time['minute'] }}{{ ansible_date_time['second'] }}.zip"
         dest: "{{ playbook_dir }}/backups/"
         flat: yes
-      
+
+    - name: Remove backup file on {{ host_id }}
+      file:
+        path: "/tmp/backup-{{ host_id }}-{{ project_id }}-{{ ansible_date_time['date'] }}-{{ ansible_date_time['hour'] }}{{ ansible_date_time['minute'] }}{{ ansible_date_time['second'] }}.zip"
+        state: absent
