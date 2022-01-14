@@ -42,20 +42,20 @@ fi
 # Stop project containers
 
 echo ""
-echo "Stopping project containers"
+echo "Stopping project containers..."
 
 if [ $mode == "standalone" ]
 then
-  echo "Stopping synapse-admin container - Executing command: lxc stop "$hostname":synapse-admin"
+  echo "...stopping synapse-admin container - Executing command: lxc stop "$hostname":synapse-admin"
   lxc stop "$hostname":synapse-admin
   echo ""
 fi
 
-echo "Stopping element container - Executing command: lxc stop "$hostname":element"
+echo "...stopping element container - Executing command: lxc stop "$hostname":element"
 lxc stop "$hostname":element
 echo ""
 
-echo "Stopping synapse container - Executing command: lxc stop "$hostname":synapse"
+echo "...stopping synapse container - Executing command: lxc stop "$hostname":synapse"
 lxc stop "$hostname":synapse
 echo ""
 

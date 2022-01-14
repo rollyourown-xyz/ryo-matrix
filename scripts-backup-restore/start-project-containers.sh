@@ -42,20 +42,20 @@ fi
 # Start project containers
 
 echo ""
-echo "Starting project containers"
+echo "Starting project containers..."
 
 if [ $mode == "standalone" ]
 then
-  echo "Starting synapse-admin container - Executing command: lxc start "$hostname":synapse-admin"
+  echo "...starting synapse-admin container - Executing command: lxc start "$hostname":synapse-admin"
   lxc start "$hostname":synapse-admin
   echo ""
 fi
 
-echo "Starting element container - Executing command: lxc start "$hostname":element"
+echo "...starting element container - Executing command: lxc start "$hostname":element"
 lxc start "$hostname":element
 echo ""
 
-echo "Starting synapse container - Executing command: lxc start "$hostname":synapse"
+echo "...starting synapse container - Executing command: lxc start "$hostname":synapse"
 lxc start "$hostname":synapse
 echo ""
 
