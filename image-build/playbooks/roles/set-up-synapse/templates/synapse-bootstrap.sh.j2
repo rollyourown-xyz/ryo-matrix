@@ -30,10 +30,10 @@ cp -p /usr/local/bootstrap/homeserver.yaml /etc/matrix-synapse/homeserver.yaml
 cp -p /usr/local/bootstrap/log.yaml /etc/matrix-synapse/log.yaml
   
 # Enable synapse service
-service matrix-synapse enable
+systemctl enable matrix-synapse.service
 
 # Start synapse service
-service matrix-synapse start
+systemctl start matrix-synapse.service
 
 
 # If the file "ADMIN_ADDED" is not already present then add synapse admin user
