@@ -11,7 +11,6 @@ helpMessage()
   echo "Usage: ./archive-container-storage.sh -n hostname -m mode"
   echo "Flags:"
   echo -e "-n hostname \t\t(Mandatory) Name of the host on which to start project containers"
-  echo -e "-m mode \t\t(Mandatory) Mode for the project deployment, e.g. standalone"
   echo -e "-h \t\t\tPrint this help message"
   echo ""
   exit 1
@@ -24,11 +23,10 @@ errorMessage()
   exit 1
 }
 
-while getopts n:m:h flag
+while getopts n:h flag
 do
   case "${flag}" in
     n) hostname=${OPTARG};;
-    m) mode=${OPTARG};;
     h) helpMessage ;;
     ?) errorMessage ;;
   esac
