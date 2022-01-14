@@ -93,9 +93,6 @@ echo "Stop project containers on "$hostname""
 # Back up project container persistent storage
 ##############################################
 
-###
-### TODO: Try without become
-###
 echo ""
 echo "Back up project container persistent storage on "$hostname""
 ansible-playbook -i "$SCRIPT_DIR"/../ryo-host/configuration/inventory_"$hostname" "$SCRIPT_DIR"/backup-restore/backup-container-storage.yml --extra-vars "host_id="$hostname""
@@ -104,9 +101,43 @@ ansible-playbook -i "$SCRIPT_DIR"/../ryo-host/configuration/inventory_"$hostname
 # Back up Modules
 #################
 
-# TODO
-## WITH USER INPUT WHETHER TO BACK UP MODULES AND WHICH ONES
+# For each module, back up module if user agrees
+echo ""
+echo "Module backups"
 
+for module in $MODULES
+do
+  echo ""
+  echo -n "Back up "$module" module (default is 'n')? "
+  read -e -p "[y/n]:" BACKUP_MODULE
+  BACKUP_MODULE="${BACKUP_MODULE:-"n"}"
+  BACKUP_MODULE="${BACKUP_MODULE,,}"
+
+  # Check input
+  while [ ! "$BACKUP_MODULE" == "y" ] && [ ! "$BACKUP_MODULE" == "n" ]
+  do
+    echo "Invalid option "${BACKUP_MODULE}". Please try again."
+    echo -n "Back up "$module" module (default is 'n')? "
+    read -e -p "[y/n]:" BACKUP_MODULE
+    BACKUP_MODULE="${BACKUP_MODULE:-"y"}"
+    BACKUP_MODULE="${BACKUP_MODULE,,}"
+  done
+
+  if [ "$BACKUP_MODULE" == "y" ]; then
+    # git pull module repository
+    echo ""
+    echo "Updating "$module" repository..."
+    /bin/bash "$SCRIPT_DIR"/scripts-modules/get-module.sh -m "$module"
+    echo ""
+    echo ""$module" module repository updated."
+    # Back up module
+    /bin/bash "$SCRIPT_DIR"/scripts-modules/backup-module.sh -n "$hostname" -m "$module"
+    echo ""
+    echo ""$module" back up completed from "$hostname"."
+  else
+    echo "Skipping "$module" module backup."
+  fi
+done
 
 
 # Start project containers
