@@ -8,10 +8,9 @@ helpMessage()
   echo "stop-project-containers.sh: Stop the containers of a rollyourown.xyz project"
   echo ""
   echo "Help: stop-project-containers.sh"
-  echo "Usage: ./stop-project-containers.sh -n hostname -m mode"
+  echo "Usage: ./stop-project-containers.sh -n hostname"
   echo "Flags:"
   echo -e "-n hostname \t\t(Mandatory) Name of the host on which to stop project containers"
-  echo -e "-m mode \t\t(Mandatory) Mode for the project deployment, e.g. standalone"
   echo -e "-h \t\t\tPrint this help message"
   echo ""
   exit 1
@@ -24,19 +23,33 @@ errorMessage()
   exit 1
 }
 
-while getopts n:m:h flag
+while getopts n:h flag
 do
   case "${flag}" in
     n) hostname=${OPTARG};;
-    m) mode=${OPTARG};;
     h) helpMessage ;;
     ?) errorMessage ;;
   esac
 done
 
-if [ -z "$hostname" ] ||  [ -z "$mode" ]
+if [ -z "$hostname" ]
 then
   errorMessage
+fi
+
+
+# Get Project IdP mode from configuration file
+PROJECT_IDP_MODE="$(yq eval '.project_idp_mode' "$SCRIPT_DIR"/../configuration/configuration_"$hostname".yml)"
+
+modeErrorMessage()
+{
+  echo "Invalid IdP mode \""$PROJECT_IDP_MODE"\". Please check configuration."
+  exit 1
+}
+
+# Check IdP mode in configuration is supported
+if [ ! "$PROJECT_IDP_MODE" == "standalone" ] && [ ! "$PROJECT_IDP_MODE" == "gitea" ]; then
+  modeErrorMessage
 fi
 
 # Stop project containers
@@ -44,7 +57,7 @@ fi
 echo ""
 echo "Stopping project containers..."
 
-if [ $mode == "standalone" ]
+if [ "$PROJECT_IDP_MODE" == "standalone" ]
 then
   echo "...stopping synapse-admin container"
   lxc stop "$hostname":synapse-admin
