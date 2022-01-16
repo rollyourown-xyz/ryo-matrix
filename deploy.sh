@@ -81,7 +81,7 @@ echo "rollyourown.xyz deployment script for "$PROJECT_ID""
 ###########################
 
 echo "Refreshing project repository with git pull to ensure the current version"
-git pull
+cd "$SCRIPT_DIR" && git pull
 
 
 # Deploy Modules
