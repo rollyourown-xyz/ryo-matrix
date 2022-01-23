@@ -2,10 +2,9 @@
 ################################################
 
 module "deploy-matrix-ingress-proxy-backend-services-for-synapse" {
+  source = "../../ryo-ingress-proxy/module-deployment/modules/deploy-ingress-proxy-backend-services"
 
   depends_on = [ lxd_container.synapse ]
-
-  source = "../../ryo-ingress-proxy/module-deployment/modules/deploy-ingress-proxy-backend-services"
 
   non_ssl_backend_services = [ "synapse" ]
 }
