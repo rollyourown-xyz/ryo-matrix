@@ -588,6 +588,7 @@ oidc_providers:
     userinfo_endpoint: "https://{{ project_idp_gitea_domain_name }}/api/v1/user"
     client_id: "{{ project_idp_gitea_client_id }}"
     client_secret: "{{ project_idp_gitea_client_secret }}"
+    client_auth_method: "client_secret_post"
     scopes: [ ]
     allow_existing_users: true
     user_mapping_provider:
