@@ -52,7 +52,9 @@ if [ ! "$PROJECT_IDP_MODE" == "standalone" ] && [ ! "$PROJECT_IDP_MODE" == "gite
   modeErrorMessage
 fi
 
+
 # Stop project containers
+#########################
 
 echo ""
 echo "Stopping project containers..."
