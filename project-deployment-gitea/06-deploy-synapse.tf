@@ -3,7 +3,7 @@
 
 resource "lxd_container" "synapse" {
 
-  depends_on = [ module.deploy-synapse-database-and-user ]
+  depends_on = [ module.deploy-matrix-cert-domains, module.deploy-synapse-database-and-user ]
 
   remote     = var.host_id
   name       = "synapse"

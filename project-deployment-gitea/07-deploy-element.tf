@@ -2,6 +2,9 @@
 ##########################
 
 resource "lxd_container" "element" {
+
+  depends_on = [ module.deploy-matrix-cert-domains ]
+
   remote     = var.host_id
   name       = "element"
   image      = join("-", [ local.project_id, "element", var.image_version ])
