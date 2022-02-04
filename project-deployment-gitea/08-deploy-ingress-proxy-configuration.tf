@@ -9,7 +9,7 @@ module "deploy-matrix-ingress-proxy-backend-services" {
   non_ssl_backend_services = [ "synapse", "element" ]
 }
 
-module "deploy-matrix-ingress-proxy-configuration" {
+module "deploy-matrix-ingress-proxy-acl-configuration" {
   source = "../../ryo-ingress-proxy/module-deployment/modules/deploy-ingress-proxy-configuration"
 
   depends_on = [ module.deploy-matrix-ingress-proxy-backend-services ]
@@ -23,8 +23,20 @@ module "deploy-matrix-ingress-proxy-configuration" {
   ingress-proxy_host_only_acls = {
     host-element = {host = join("", [ "element.", local.project_domain_name])}
   }
+}
+
+module "deploy-matrix-ingress-proxy-deny-configuration" {
+  source = "../../ryo-ingress-proxy/module-deployment/modules/deploy-ingress-proxy-configuration"
+
+  depends_on = [ module.deploy-matrix-ingress-proxy-acl-configuration ]
 
   ingress-proxy_acl_denys = [ "path-synapse-admin" ]
+}
+
+module "deploy-matrix-ingress-proxy-use-backend-configuration" {
+  source = "../../ryo-ingress-proxy/module-deployment/modules/deploy-ingress-proxy-configuration"
+
+  depends_on = [ module.deploy-matrix-ingress-proxy-backend-services, module.deploy-matrix-ingress-proxy-acl-configuration ]
 
   ingress-proxy_acl_use-backends = {
     path-synapse-client = {backend_service = "synapse"},
