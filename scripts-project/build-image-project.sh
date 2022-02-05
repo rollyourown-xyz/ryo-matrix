@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Default project software versions
-element_version="1.9.9"
+element_version="1.10.1"
 synapse_version="1.51.0"
 synapse_admin_version="0.8.4"
 
