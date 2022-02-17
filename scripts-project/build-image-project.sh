@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # Default project software versions
-element_version="1.10.1"
-synapse_version="1.51.0"
+element_version="1.10.4"
+synapse_version="1.52.0"
 synapse_admin_version="0.8.4"
 
 # Script directory
