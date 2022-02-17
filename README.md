@@ -1,6 +1,6 @@
 # Roll Your Own Matrix Service
 
-Deploy a [matrix](https://matrix.org/) homeserver and an [Element](https://github.com/vector-im/element-web/) web front-end using Ansible, Packer and Terraform.
+This is a [rollyourown.xyz project](https://rollyourown.xyz/rollyourown/projects/) to deploy a [matrix](https://matrix.org/) homeserver and an [Element](https://github.com/vector-im/element-web/) web front-end using Ansible, Packer and Terraform.
 
 ## Project Summary
 
