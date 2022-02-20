@@ -10,6 +10,12 @@
     "disable_login_language_selector": false,
     "disable_3pid_login": true,
     "brand": "{{ project_domain_name }}",
+    "branding": {
+        "authFooterLinks": [
+            {% for item in element_footer_links %}{"text": "{{ item.text }}", "url": "{{ item.url }}"},
+            {% endfor -%}
+        ]
+    },
     "integrations_ui_url": "https://scalar.vector.im/",
     "integrations_rest_url": "https://scalar.vector.im/api",
     "integrations_widgets_urls": [

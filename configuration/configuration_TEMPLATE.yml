@@ -89,6 +89,21 @@ project_matrix_room_complexity: 100
 # Optional Configuration
 #-----------------------
 
+# Footer links for web client login page
+#---------------------------------------
+
+# Add footer links on the login page of the element web matrix client
+# Add further items to the list in the form shown
+# Always leave AT LEAST ONE link in this list
+element_footer_links:
+  - text: "rollyourown"
+    url: "https://rollyourown.xyz"
+  #- text: "About"
+  #  url: "https://example.com/about"
+  #- text: "Privacy Policy"
+  #  url: "https://example.com/privacy"
+
+
 # Single Sign-On mode
 #--------------------
 
