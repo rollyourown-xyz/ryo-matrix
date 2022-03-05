@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: 2022 Wilfred Nicoll <xyzroller@rollyourown.xyz>
+# SPDX-License-Identifier: GPL-3.0-or-later
+
 #--------------------------------------------------------------------------
 # Packer template for building LXD container image for a Synapse homeserver
 # Ubuntu minimal images are used as base images

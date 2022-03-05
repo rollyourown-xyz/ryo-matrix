@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: 2022 matrix.org
+# SPDX-License-Identifier: Apache-2.0
+
 # Log configuration for Synapse.
 #
 # This is a YAML file containing a standard Python logging configuration

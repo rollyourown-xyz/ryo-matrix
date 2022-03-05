@@ -1,3 +1,8 @@
+<!--
+SPDX-FileCopyrightText: 2022 Wilfred Nicoll <xyzroller@rollyourown.xyz>
+SPDX-License-Identifier: CC-BY-SA-4.0
+-->
+
 # Roll Your Own Matrix Service
 
 This is a [rollyourown.xyz project](https://rollyourown.xyz/rollyourown/projects/) to deploy a [matrix](https://matrix.org/) homeserver and an [Element](https://github.com/vector-im/element-web/) web front-end using Ansible, Packer and Terraform.
