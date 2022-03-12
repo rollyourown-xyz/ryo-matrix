@@ -4,9 +4,9 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 # Default project software versions
-element_version="1.10.4"
-synapse_version="1.52.0"
-synapse_admin_version="0.8.4"
+element_version="1.10.6"
+synapse_version="1.54.0"
+synapse_admin_version="0.8.5"
 
 # Script directory
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
