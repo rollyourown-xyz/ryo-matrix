@@ -14,6 +14,7 @@
   roles:
     - role: upgrade-container
     - role: install-iptables
+    - role: install-rsyslog
     - role: install-consul
     - role: install-nginx
     - role: install-synapse-admin
