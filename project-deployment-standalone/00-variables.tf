@@ -51,13 +51,23 @@ locals {
 
 # LXD variables
 locals {
-  lxd_host_control_ipv4_address  = yamldecode(file(local.host_configuration))["host_control_ip"]
+  lxd_host_public_ipv6          = yamldecode(file(local.host_configuration))["host_public_ipv6"]
+  lxd_host_control_ipv4_address = yamldecode(file(local.host_configuration))["host_control_ip"]
   lxd_host_network_part         = yamldecode(file(local.host_configuration))["lxd_host_network_part"]
+  lxd_host_public_ipv6_address  = yamldecode(file(local.host_configuration))["host_public_ipv6_address"]
+  lxd_host_public_ipv6_prefix   = yamldecode(file(local.host_configuration))["host_public_ipv6_prefix"]
+  lxd_host_private_ipv6_prefix  = yamldecode(file(local.host_configuration))["lxd_host_private_ipv6_prefix"]
+  lxd_host_network_ipv6_subnet  = yamldecode(file(local.host_configuration))["lxd_host_network_ipv6_subnet"]
+}
+
+# Calculated variables
+locals {
+  lxd_host_ipv6_prefix = ( local.lxd_host_public_ipv6 == true ? local.lxd_host_public_ipv6_prefix : local.lxd_host_private_ipv6_prefix )
 }
 
 # Consul variables
 locals {
-  consul_ip_address  = join("", [ local.lxd_host_network_part, ".1" ])
+  consul_ip_address  = join("", [ local.lxd_host_ipv6_prefix, "::", local.lxd_host_network_ipv6_subnet, ":1" ])
 }
 
 # Variables from module remote states
@@ -70,12 +80,18 @@ data "terraform_remote_state" "ryo-postgres" {
 }
 
 locals {
-  postgres_ip_address = data.terraform_remote_state.ryo-postgres.outputs.postgres_ip_address
+  postgres_ipv4_address = data.terraform_remote_state.ryo-postgres.outputs.postgres_ipv4_address
+  postgres_ipv6_address = data.terraform_remote_state.ryo-postgres.outputs.postgres_ipv6_address
 }
 
 # Output variable definitions
 
-output "synapse-admin_ip_address" {
-    description = "IP Address of the synapse-admin container"
-    value       = lxd_container.synapse-admin.ip_address
+output "synapse-admin_ipv4_address" {
+    description = "IPv4 Address of the synapse-admin container"
+    value       = lxd_container.synapse-admin.ipv4_address
+}
+
+output "synapse-admin_ipv6_address" {
+    description = "IPv6 Address of the synapse-admin container"
+    value       = lxd_container.synapse-admin.ipv6_address
 }

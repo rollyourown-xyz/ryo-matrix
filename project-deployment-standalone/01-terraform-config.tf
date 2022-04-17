@@ -39,13 +39,13 @@ provider "lxd" {
 }
 
 provider "consul" {
-  address    = join("", [ local.consul_ip_address, ":8500" ])
+  address    = join("", [ "[", local.consul_ip_address, "]", ":8500" ])
   scheme     = "http"
   datacenter = var.host_id
 }
 
 provider "postgresql" {
-  host            = local.postgres_ip_address
+  host            = local.postgres_ipv6_address
   port            = 5432
   database        = "postgres"
   username        = "postgres"

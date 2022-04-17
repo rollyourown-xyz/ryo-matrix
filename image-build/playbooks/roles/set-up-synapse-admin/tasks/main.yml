@@ -17,12 +17,12 @@
 # Copy NGINX sites-available file
 #
 - name: Copy nginx sites-available file
-  template:
+  copy:
     mode: 0644
     owner: root
     group: root
     dest: "/etc/nginx/sites-available/synapse-admin"
-    src: nginx-sites-available.j2
+    src: nginx-sites-available
     force: yes
 
 
