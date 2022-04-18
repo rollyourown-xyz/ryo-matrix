@@ -34,16 +34,17 @@ table inet filter {
         ## Consul Client Ports
         ######################
 
-        # Allow Consul LAN Serf on TCP and UDP Ports 8301 from LXD network
-        ip saddr {{ lxd_host_network_part }}.0/24 udp dport 8301 accept
-        ip saddr {{ lxd_host_network_part }}.0/24 tcp dport 8301 accept
-        {% if host_public_ipv6 == true %}ip6 saddr {{ host_public_ipv6_prefix }}::{{ lxd_host_network_ipv6_subnet }}:0/112 udp dport 8301 accept
-        {% else %}ip6 saddr {{ lxd_host_private_ipv6_prefix }}::{{ lxd_host_network_ipv6_subnet }}:0/112 udp dport 8301 accept
+        # Allow Consul LAN/WAN Serf on TCP and UDP Ports 8301/8302 from LXD network
+        ip saddr {{ lxd_host_network_part }}.0/24 udp dport { 8301, 8302 } accept
+        ip saddr {{ lxd_host_network_part }}.0/24 tcp dport { 8301, 8302 } accept
+        {% if host_public_ipv6 == true %}ip6 saddr {{ host_public_ipv6_prefix }}::{{ lxd_host_network_ipv6_subnet }}:0/112 udp dport { 8301, 8302 } accept
+        {% else %}ip6 saddr {{ lxd_host_private_ipv6_prefix }}::{{ lxd_host_network_ipv6_subnet }}:0/112 udp dport { 8301, 8302 } accept
         {% endif %}
 
-        {% if host_public_ipv6 == true %}ip6 saddr {{ host_public_ipv6_prefix }}::{{ lxd_host_network_ipv6_subnet }}:0/112 tcp dport 8301 accept
-        {% else %}ip6 saddr {{ lxd_host_private_ipv6_prefix }}::{{ lxd_host_network_ipv6_subnet }}:0/112 tcp dport 8301 accept
+        {% if host_public_ipv6 == true %}ip6 saddr {{ host_public_ipv6_prefix }}::{{ lxd_host_network_ipv6_subnet }}:0/112 tcp dport { 8301, 8302 } accept
+        {% else %}ip6 saddr {{ lxd_host_private_ipv6_prefix }}::{{ lxd_host_network_ipv6_subnet }}:0/112 tcp dport { 8301, 8302 } accept
         {% endif %}
+
 
 
         ## NGINX Ports
@@ -56,6 +57,7 @@ table inet filter {
         {% if host_public_ipv6 == true %}ip6 saddr {{ host_public_ipv6_prefix }}::{{ lxd_host_network_ipv6_subnet }}:0/112 tcp dport 80 accept
         {% else %}ip6 saddr {{ lxd_host_private_ipv6_prefix }}::{{ lxd_host_network_ipv6_subnet }}:0/112 tcp dport 80 accept
         {% endif %}
+
 
     }
 
