@@ -45,7 +45,10 @@ if [ ! -f "/etc/matrix-synapse/ADMIN_ADDED" ]; then
   sleep 60
 
   # Add synapse admin user
-  register_new_matrix_user --config /etc/matrix-synapse/homeserver.yaml http://[::1]:8008 --user {{ project_admin_username }} --password {{ project_admin_password }} --admin
+  {% if host_public_ipv6 == true %}register_new_matrix_user --config /etc/matrix-synapse/homeserver.yaml http://[::1]:8008 --user {{ project_admin_username }} --password {{ project_admin_password }} --admin
+  {% else %}register_new_matrix_user --config /etc/matrix-synapse/homeserver.yaml http://127.0.0.1:8008 --user {{ project_admin_username }} --password {{ project_admin_password }} --admin
+  {% endif %}
+
 
   # Add file ADMIN_ADDED to indicate synapse admin user no longer needs to be added
   touch /etc/matrix-synapse/ADMIN_ADDED
