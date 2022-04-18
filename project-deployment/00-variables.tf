@@ -70,16 +70,3 @@ locals {
 locals {
   consul_ip_address  = join("", [ local.lxd_host_ipv6_prefix, "::", local.lxd_host_network_ipv6_subnet, ":1" ])
 }
-
-
-# Output variable definitions
-
-output "synapse-admin_ipv4_address" {
-    description = "IPv4 Address of the synapse-admin container"
-    value       = lxd_container.synapse-admin.ipv4_address
-}
-
-output "synapse-admin_ipv6_address" {
-    description = "IPv6 Address of the synapse-admin container"
-    value       = lxd_container.synapse-admin.ipv6_address
-}
