@@ -45,7 +45,7 @@ provider "consul" {
 }
 
 provider "postgresql" {
-  host            = local.postgres_ipv6_address
+  host            = join("", [ "postgres.service.", var.host_id, ".ryo"])
   port            = 5432
   database        = "postgres"
   username        = "postgres"
