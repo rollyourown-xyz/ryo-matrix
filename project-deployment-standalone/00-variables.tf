@@ -39,6 +39,7 @@ locals {
   project_smtp_server_username = yamldecode(file(local.project_configuration))["project_smtp_server_username"]
   project_locales              = yamldecode(file(local.project_configuration))["project_locales"]
   project_default_locale       = yamldecode(file(local.project_configuration))["project_default_locale"]
+  project_idp_mode             = yamldecode(file(local.project_configuration))["project_idp_mode"]
 }
 
 # Sensitive variables
@@ -70,19 +71,6 @@ locals {
   consul_ip_address  = join("", [ local.lxd_host_ipv6_prefix, "::", local.lxd_host_network_ipv6_subnet, ":1" ])
 }
 
-# Variables from module remote states
-
-data "terraform_remote_state" "ryo-postgres" {
-  backend = "local"
-  config = {
-    path = join("", ["${abspath(path.root)}/../../ryo-postgres/module-deployment/terraform.tfstate.d/", var.host_id, "/terraform.tfstate"])
-  }
-}
-
-locals {
-  postgres_ipv4_address = data.terraform_remote_state.ryo-postgres.outputs.postgres_ipv4_address
-  postgres_ipv6_address = data.terraform_remote_state.ryo-postgres.outputs.postgres_ipv6_address
-}
 
 # Output variable definitions
 
