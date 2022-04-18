@@ -1,13 +1,16 @@
 # SPDX-FileCopyrightText: 2022 Wilfred Nicoll <xyzroller@rollyourown.xyz>
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-# Deploy element webserver
-##########################
+# Deploy synapse-admin webserver
+################################
 
-resource "lxd_container" "element" {
+resource "lxd_container" "synapse-admin" {
+
+  count = ( local.project_idp_mode == "standalone" ? 1 : 0 )
+
   remote     = var.host_id
-  name       = "element"
-  image      = join("-", [ local.project_id, "element", var.image_version ])
+  name       = "synapse-admin"
+  image      = join("-", [ local.project_id, "synapse-admin", var.image_version ])
   profiles   = ["default"]
   
   config = { 
