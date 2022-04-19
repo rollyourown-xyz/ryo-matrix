@@ -71,7 +71,7 @@ listeners:
     type: http
     x_forwarded: true
 
-    {% if host_public_ipv6 == true %}bind_addresses: ['0.0.0.0', '::']
+    {% if host_public_ipv6 == true %}bind_addresses: ['::']
     {% else %}bind_addresses: ['0.0.0.0']
     {% endif %}
 
