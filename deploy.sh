@@ -197,7 +197,7 @@ echo "Running project-specific host setup for "$PROJECT_ID" on "$hostname""
 # Build project images for the configured IdP mode
 echo ""
 echo "Running image build for "$PROJECT_ID" on "$hostname" in IdP mode "$PROJECT_IDP_MODE""
-/bin/bash "$SCRIPT_DIR"/scripts-project/build-image-project.sh -n "$hostname" -v "$version" -m "$PROJECT_IDP_MODE"
+/bin/bash "$SCRIPT_DIR"/scripts-project/build-image-project.sh -n "$hostname" -v "$version"
 
 # Deploy project containers for the configured IdP mode
 echo ""
