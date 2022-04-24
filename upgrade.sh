@@ -167,5 +167,5 @@ echo "Building new image(s) for "$PROJECT_ID" on "$hostname" in IdP mode "$PROJE
 
 # Deploy project containers for the configured IdP mode
 echo ""
-echo "Deploying new image(s) for "$PROJECT_ID" on "$hostname" in IdP mode "$PROJECT_IDP_MODE""
+echo "Deploying new image(s) for "$PROJECT_ID" on "$hostname""
 /bin/bash "$SCRIPT_DIR"/scripts-project/deploy-project.sh -n "$hostname" -v "$version"
