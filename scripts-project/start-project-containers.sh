@@ -41,33 +41,15 @@ then
 fi
 
 
-# Get Project IdP mode from configuration file
-PROJECT_IDP_MODE="$(yq eval '.project_idp_mode' "$SCRIPT_DIR"/../configuration/configuration_"$hostname".yml)"
-
-modeErrorMessage()
-{
-  echo "Invalid IdP mode \""$PROJECT_IDP_MODE"\". Please check configuration."
-  exit 1
-}
-
-# Check IdP mode in configuration is supported
-if [ ! "$PROJECT_IDP_MODE" == "standalone" ] && [ ! "$PROJECT_IDP_MODE" == "gitea" ]; then
-  modeErrorMessage
-fi
-
-
 # Start project containers
 ##########################
 
 echo ""
 echo "Starting project containers..."
 
-if [ "$PROJECT_IDP_MODE" == "standalone" ]
-then
-  echo "...starting synapse-admin container"
-  lxc start "$hostname":synapse-admin
-  echo ""
-fi
+echo "...starting synapse-admin container"
+lxc start "$hostname":synapse-admin
+echo ""
 
 echo "...starting element container"
 lxc start "$hostname":element

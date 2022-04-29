@@ -46,12 +46,9 @@ fi
 echo ""
 echo "Deleting project container..."
 
-if [ "$PROJECT_IDP_MODE" == "standalone" ]
-then
-  echo "...deleting synapse-admin container"
-  lxc delete --force "$hostname":synapse-admin
-  echo ""
-fi
+echo "...deleting synapse-admin container"
+lxc delete --force "$hostname":synapse-admin
+echo ""
 
 echo "...deleting element container"
 lxc delete --force "$hostname":element
