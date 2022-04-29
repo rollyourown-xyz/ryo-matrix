@@ -25,9 +25,15 @@ require_auth_for_profile_requests: true
 
 include_profile_data_on_invite: false
 
-allow_public_rooms_without_auth: false
+{% if allow_public_rooms_without_auth == true %}allow_public_rooms_without_auth: true
+{% else %}allow_public_rooms_without_auth: false
+{% endif %}
 
-allow_public_rooms_over_federation: false
+
+{% if allow_public_rooms_over_federation == true %}allow_public_rooms_over_federation: true
+{% else %}allow_public_rooms_over_federation: false
+{% endif %}
+
 
 #default_room_version: "6"
 

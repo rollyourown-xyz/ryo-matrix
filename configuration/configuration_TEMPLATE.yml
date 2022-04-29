@@ -92,6 +92,21 @@ project_matrix_room_complexity: 100
 # Optional Configuration
 #-----------------------
 
+# Public rooms parameters
+# -----------------------
+
+# If allow_public_rooms_without_auth is set to 'true', then the server's public rooms
+# directoy is accessible from anywhere on the internet. It is recommended to leave this as
+# the default 'false' unless there is a specific need to do this
+allow_public_rooms_without_auth: false
+
+# If allow_public_rooms_over_federation is set to 'true', then the server's public rooms
+# directory is visible to logged in users of other homeservers anywhere on the internet.
+# It is recommended to leave this as the default 'false' unless there is a specific
+# need to do this
+allow_public_rooms_over_federation: false
+
+
 # Footer links for web client login page
 #---------------------------------------
 
