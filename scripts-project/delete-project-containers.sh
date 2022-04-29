@@ -40,15 +40,34 @@ then
   errorMessage
 fi
 
+
+# Get Project IdP mode from configuration file
+PROJECT_IDP_MODE="$(yq eval '.project_idp_mode' "$SCRIPT_DIR"/../configuration/configuration_"$hostname".yml)"
+
+modeErrorMessage()
+{
+  echo "Invalid IdP mode \""$PROJECT_IDP_MODE"\". Please check configuration."
+  exit 1
+}
+
+# Check IdP mode in configuration is supported
+if [ ! "$PROJECT_IDP_MODE" == "standalone" ] && [ ! "$PROJECT_IDP_MODE" == "gitea" ]; then
+  modeErrorMessage
+fi
+
+
 # Deleting project containers
 #############################
 
 echo ""
 echo "Deleting project container..."
 
-echo "...deleting synapse-admin container"
-lxc delete --force "$hostname":synapse-admin
-echo ""
+if [ "$PROJECT_IDP_MODE" == "standalone" ]
+then
+  echo "...deleting synapse-admin container"
+  lxc delete --force "$hostname":synapse-admin
+  echo ""
+fi
 
 echo "...deleting element container"
 lxc delete --force "$hostname":element

@@ -64,6 +64,22 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 # Get Project ID from configuration file
 PROJECT_ID="$(yq eval '.project_id' "$SCRIPT_DIR"/configuration/configuration_"$hostname".yml)"
 
+
+# Get Project IdP mode from configuration file
+PROJECT_IDP_MODE="$(yq eval '.project_idp_mode' "$SCRIPT_DIR"/configuration/configuration_"$hostname".yml)"
+
+modeErrorMessage()
+{
+  echo "Invalid IdP mode \""$PROJECT_IDP_MODE"\". Please check configuration."
+  exit 1
+}
+
+# Check IdP mode in configuration is supported
+if [ ! "$PROJECT_IDP_MODE" == "standalone" ] && [ ! "$PROJECT_IDP_MODE" == "gitea" ]; then
+  modeErrorMessage
+fi
+
+
 # Info
 echo "rollyourown.xyz deployment script for "$PROJECT_ID""
 
@@ -181,8 +197,8 @@ echo "Running project-specific host setup for "$PROJECT_ID" on "$hostname""
 
 # Build project images for the configured IdP mode
 echo ""
-echo "Running image build for "$PROJECT_ID" on "$hostname""
-/bin/bash "$SCRIPT_DIR"/scripts-project/build-image-project.sh -n "$hostname" -v "$version"
+echo "Running image build for "$PROJECT_ID" on "$hostname" in IdP mode "$PROJECT_IDP_MODE""
+/bin/bash "$SCRIPT_DIR"/scripts-project/build-image-project.sh -n "$hostname" -v "$version" -m "$PROJECT_IDP_MODE"
 
 # Deploy project containers for the configured IdP mode
 echo ""

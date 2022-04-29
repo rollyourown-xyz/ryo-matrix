@@ -145,12 +145,12 @@ done
 # Upgrade project components
 ############################
 
-# Build new project images for the configured IdP mode
+# Build new project images
 echo ""
 echo "Building new image(s) for "$PROJECT_ID" on "$hostname""
 /bin/bash "$SCRIPT_DIR"/scripts-project/build-image-project.sh -n "$hostname" -v "$version"
 
-# Deploy project containers for the configured IdP mode
+# Deploy project containers
 echo ""
 echo "Deploying new image(s) for "$PROJECT_ID" on "$hostname""
 /bin/bash "$SCRIPT_DIR"/scripts-project/deploy-project.sh -n "$hostname" -v "$version"

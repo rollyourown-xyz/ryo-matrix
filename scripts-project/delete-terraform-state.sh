@@ -43,7 +43,22 @@ fi
 # Get Project ID from configuration file
 PROJECT_ID="$(yq eval '.project_id' "$SCRIPT_DIR"/../configuration/configuration_"$hostname".yml)"
 
+# Get Project IdP mode from configuration file
+PROJECT_IDP_MODE="$(yq eval '.project_idp_mode' "$SCRIPT_DIR"/../configuration/configuration_"$hostname".yml)"
+
+modeErrorMessage()
+{
+  echo "Invalid IdP mode \""$PROJECT_IDP_MODE"\". Please check configuration."
+  exit 1
+}
+
+# Check IdP mode in configuration is supported
+if [ ! "$PROJECT_IDP_MODE" == "standalone" ] && [ ! "$PROJECT_IDP_MODE" == "gitea" ]; then
+  modeErrorMessage
+fi
+
+
 # Delete terraform state for project on "$hostname"
 echo ""
-echo "Deleting terraform state for project "$PROJECT_ID" on "$hostname""
-rm -R "$SCRIPT_DIR"/../project-deployment/terraform.tfstate.d/"$hostname"/terraform.tfstate
+echo "Deleting terraform state for project "$PROJECT_ID" on "$hostname" in IDP mode "$PROJECT_IDP_MODE""
+rm -R "$SCRIPT_DIR"/../project-deployment-"$PROJECT_IDP_MODE"/terraform.tfstate.d/"$hostname"/terraform.tfstate

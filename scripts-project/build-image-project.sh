@@ -32,7 +32,7 @@ errorMessage()
   exit 1
 }
 
-while getopts n:v:h flag
+while getopts n:v:m:h flag
 do
   case "${flag}" in
     n) hostname=${OPTARG};;
@@ -45,6 +45,21 @@ done
 if [ -z "$hostname" ] || [ -z "$version" ]
 then
   errorMessage
+fi
+
+
+# Get Project IdP mode from configuration file
+PROJECT_IDP_MODE="$(yq eval '.project_idp_mode' "$SCRIPT_DIR"/../configuration/configuration_"$hostname".yml)"
+
+modeErrorMessage()
+{
+  echo "Invalid IdP mode \""$PROJECT_IDP_MODE"\". Please check configuration."
+  exit 1
+}
+
+# Check IdP mode in configuration is supported
+if [ ! "$PROJECT_IDP_MODE" == "standalone" ] && [ ! "$PROJECT_IDP_MODE" == "gitea" ]; then
+  modeErrorMessage
 fi
 
 
@@ -65,8 +80,11 @@ packer build -var "host_id="$hostname"" -var "version=$version" -var "synapse_ve
 echo "Completed"
 
 # Synapse-admin webserver
-echo ""
-echo "Building synapse-admin image on "$hostname""
-echo "Executing command: packer build -var \"host_id="$hostname"\" -var \"version=$version\" -var \"synapse_admin_version=$synapse_admin_version\" "$SCRIPT_DIR"/../image-build/synapse-admin.pkr.hcl"
-packer build -var "host_id="$hostname"" -var "version=$version" -var "synapse_admin_version=$synapse_admin_version" "$SCRIPT_DIR"/../image-build/synapse-admin.pkr.hcl
-echo "Completed"
+if [ "$PROJECT_IDP_MODE" == "standalone" ]
+then
+  echo ""
+  echo "Building synapse-admin image on "$hostname""
+  echo "Executing command: packer build -var \"host_id="$hostname"\" -var \"version=$version\" -var \"synapse_admin_version=$synapse_admin_version\" "$SCRIPT_DIR"/../image-build/synapse-admin.pkr.hcl"
+  packer build -var "host_id="$hostname"" -var "version=$version" -var "synapse_admin_version=$synapse_admin_version" "$SCRIPT_DIR"/../image-build/synapse-admin.pkr.hcl
+  echo "Completed"
+fi
