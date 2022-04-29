@@ -6,6 +6,8 @@
 
 resource "lxd_container" "synapse-admin" {
 
+  count = ( local.project_idp_mode == "standalone" ? 1 : 0 )
+
   remote     = var.host_id
   name       = "synapse-admin"
   image      = join("-", [ local.project_id, "synapse-admin", var.image_version ])
