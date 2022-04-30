@@ -35,12 +35,21 @@ project_coturn_domain_name: <SUBDOMAIN>.<DOMAIN>
 
 # Enter a username for the administrator of this project, 
 # this will be used for logging in to the synapse-admin service for administering users
+#
+# NOTE: If you use project_idp_mode: gitea (see below), this should be the same admin username
+# as for the Gitea server deployed by the project ryo-gitea
+#
 project_admin_username: <USERNAME>
 
 # Enter a password for the administrator of this project.
 # !!! The password should have a minimum of 12 characters with at least
 # !!! 1 upper case character, 1 lower case character and 1 numerical digit
 # This password will be the username and password for the synapse administrator account
+#
+# NOTE: If you use project_idp_mode: gitea (see below), this can be set to anything - the 
+# admin account password set in the ryo-gitea project will be used instead to log in as
+# administrator
+#
 project_admin_password: <PASSWORD>
 
 # Enter an email address for the administrator of this project, 
