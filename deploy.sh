@@ -124,8 +124,7 @@ if [ $skip_modules == false ]; then
         cd "$SCRIPT_DIR"/../"$module" && git pull
       else
         echo "Cloning "$module" repository. Executing 'git clone' for "$module" repository"
-        #git clone https://github.com/rollyourown-xyz/"$module" "$SCRIPT_DIR"/../"$module"
-        git clone https://git.rollyourown.xyz/ryo-projects/"$module" "$SCRIPT_DIR"/../"$module"
+        git clone https://github.com/rollyourown-xyz/"$module" "$SCRIPT_DIR"/../"$module"
       fi
 
       # Deploy module
@@ -170,8 +169,7 @@ if [ $skip_modules == false ]; then
           cd "$SCRIPT_DIR"/../"$module" && git pull
         else
           echo "Cloning "$module" repository. Executing 'git clone' for "$module" repository"
-          #git clone https://github.com/rollyourown-xyz/"$module" "$SCRIPT_DIR"/../"$module"
-          git clone https://git.rollyourown.xyz/ryo-projects/"$module" "$SCRIPT_DIR"/../"$module"
+          git clone https://github.com/rollyourown-xyz/"$module" "$SCRIPT_DIR"/../"$module"
         fi
 
         # Deploy module
