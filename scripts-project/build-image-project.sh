@@ -32,7 +32,7 @@ errorMessage()
   exit 1
 }
 
-while getopts n:v:m:h flag
+while getopts n:v:h flag
 do
   case "${flag}" in
     n) hostname=${OPTARG};;
