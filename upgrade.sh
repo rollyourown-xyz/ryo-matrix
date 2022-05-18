@@ -15,7 +15,7 @@ MODULES="ryo-ingress-proxy ryo-postgres ryo-coturn ryo-wellknown"
 
 helpMessage()
 {
-  echo "upgrade.sh: Upgrade a rollyourown.xyz project"
+  echo "upgrade.sh: Upgrade a rollyourown project"
   echo "Usage: ./upgrade.sh -n hostname -v version"
   echo "Flags:"
   echo -e "-n hostname \t\t(Mandatory) Name of the host on which to upgrade the project"
@@ -58,7 +58,7 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 PROJECT_ID="$(yq eval '.project_id' "$SCRIPT_DIR"/configuration/configuration_"$hostname".yml)"
 
 # Info
-echo "rollyourown.xyz upgrade script for "$PROJECT_ID""
+echo "rollyourown upgrade script for "$PROJECT_ID""
 
 
 # Update project repository

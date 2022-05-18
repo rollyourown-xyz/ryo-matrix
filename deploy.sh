@@ -15,7 +15,7 @@ MODULES="ryo-ingress-proxy ryo-postgres ryo-coturn ryo-wellknown"
 
 helpMessage()
 {
-  echo "deploy.sh: Deploy a rollyourown.xyz project"
+  echo "deploy.sh: Deploy a rollyourown project"
   echo "Usage: ./deploy.sh -n hostname -v version"
   echo "Flags:"
   echo -e "-n hostname \t\t(Mandatory) Name of the host on which to deploy the project"
@@ -81,7 +81,7 @@ fi
 
 
 # Info
-echo "rollyourown.xyz deployment script for "$PROJECT_ID""
+echo "rollyourown deployment script for "$PROJECT_ID""
 
 
 # Update project repository

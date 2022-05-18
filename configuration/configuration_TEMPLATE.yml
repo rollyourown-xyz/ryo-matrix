@@ -29,7 +29,7 @@ project_domain_name: <DOMAIN>
 # Set the STUN/TURN server subdomain to be used for the project - for example coturn.{{project_domain_name}}
 # The DNS A record for the project's STUN/TURN server domain must be set to point to the public IPv4 address
 # of your host server
-# If a STUN/TURN server has already been deployed (e.g. by a different rollyourown.xyz project), then enter
+# If a STUN/TURN server has already been deployed (e.g. by a different rollyourown project), then enter
 # the (sub-)domain used. Otherwise, this project will deploy the ryo-coturn module using this domain name
 project_coturn_domain_name: <SUBDOMAIN>.<DOMAIN>
 
