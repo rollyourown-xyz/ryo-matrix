@@ -5,7 +5,7 @@
 
 # Default project software versions
 element_version="1.10.12"
-synapse_version="1.58.1"
+synapse_version="1.59.1"
 synapse_admin_version="0.8.5"
 
 # Script directory
