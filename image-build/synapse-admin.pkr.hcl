@@ -49,7 +49,7 @@ locals {
   build_image_os      = "ubuntu-minimal"
   build_image_release = "focal"
   
-  build_container_name = "packer-lxd-build"
+  build_container_name = "${ join(":", [ var.host_id, "packer-lxd-build" ]) }"
 
   build_inventory_file = "${abspath(path.root)}/playbooks/inventory.yml"
   build_playbook_file  = "${abspath(path.root)}/playbooks/provision-synapse-admin.yml"
@@ -72,13 +72,21 @@ locals {
   )}"
 }
 
+# Computed extra_arguments for ansible provisioner
+locals {
+  ansible_remote_argument = "${ join("", [ "ansible_lxd_remote=", var.host_id ]) }"
+}
+
+
 ## Build template
 ##
 
 source "lxd" "container" {
-  image          = join(":", [ local.build_image_os , local.build_image_release ])
-  container_name = local.build_container_name
-  output_image   = local.output_image_name
+  image               = join(":", [ local.build_image_os , local.build_image_release ])
+  profile             = "build"
+  container_name      = local.build_container_name
+  output_image        = local.output_image_name
+  publish_remote_name = var.host_id
 
   publish_properties = {
     description = local.output_image_description
@@ -93,30 +101,6 @@ build {
   provisioner "ansible" {
     inventory_file  = local.build_inventory_file
     playbook_file   = local.build_playbook_file
-    extra_arguments = [ "--extra-vars", local.build_extra_vars ]
-  }
-  
-  post-processors {
-
-    # Copy image to remote LXD host
-    post-processor "shell-local" {
-      inline = [
-        "echo \"Copying image ${local.output_image_name} to remote host ${local.remote_lxd_host}\"", 
-        "echo \"This may take some time\"",
-        "lxc image copy ${local.output_image_name} ${local.remote_lxd_host}: --copy-aliases",
-        "echo \"Image copying completed\"",
-      ]
-      keep_input_artifact = true
-    }
-
-    # Post processor for removing image from local machine after copying to remote host
-    post-processor "shell-local" {
-      inline = [
-        "echo \"Deleting local image ${local.output_image_name}\"",
-        "lxc image delete ${local.output_image_name}",
-        "echo \"Image deletion completed\"",
-      ]
-      keep_input_artifact = false
-    }
+    extra_arguments = [ "-e", local.ansible_remote_argument, "--extra-vars", local.build_extra_vars ]
   }
 }
