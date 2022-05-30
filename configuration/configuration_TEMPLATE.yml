@@ -101,6 +101,10 @@ project_matrix_room_complexity: 100
 # Optional Configuration
 #-----------------------
 
+# Set this variable to true to build images on the remote host server. Otherwise,
+# images will be built on the control node and uploaded to the host server.
+remote_build: false
+
 # Public rooms parameters
 # -----------------------
 

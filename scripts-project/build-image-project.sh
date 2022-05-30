@@ -20,6 +20,7 @@ helpMessage()
   echo "Flags:"
   echo -e "-n hostname \t\t(Mandatory) Name of the host for which to build images"
   echo -e "-v version \t\t(Mandatory) Version stamp to apply to images, e.g. 20210101-1"
+  echo -e "-r remote_build \t\t(Mandatory) Whether to build images on the remote LXD host (true/false)"
   echo -e "-h \t\t\tPrint this help message"
   echo ""
   exit 1
@@ -32,17 +33,18 @@ errorMessage()
   exit 1
 }
 
-while getopts n:v:h flag
+while getopts n:v:r:h flag
 do
   case "${flag}" in
     n) hostname=${OPTARG};;
     v) version=${OPTARG};;
+    r) remote_build=${OPTARG};;
     h) helpMessage ;;
     ?) errorMessage ;;
   esac
 done
 
-if [ -z "$hostname" ] || [ -z "$version" ]
+if [ -z "$hostname" ] || [ -z "$version" ] || [ -z "$remote_build" ]
 then
   errorMessage
 fi
@@ -68,15 +70,15 @@ fi
 # Element-web webserver
 echo ""
 echo "Building element-web image on "$hostname""
-echo "Executing command: packer build -var \"host_id="$hostname"\" -var \"element_version=$element_version\" -var \"version=$version\" "$SCRIPT_DIR"/../image-build/element.pkr.hcl"
-packer build -var "host_id="$hostname"" -var "element_version=$element_version" -var "version=$version" "$SCRIPT_DIR"/../image-build/element.pkr.hcl
+echo "Executing command: packer build -var \"host_id="$hostname"\" -var \"element_version="$element_version"\" -var \"version="$version"\" -var \"remote="$remote_build"\" "$SCRIPT_DIR"/../image-build/element.pkr.hcl"
+packer build -var "host_id="$hostname"" -var "element_version=$element_version" -var "version=$version" -var "remote="$remote_build"" "$SCRIPT_DIR"/../image-build/element.pkr.hcl
 echo "Completed"
 
 # Synapse homeserver
 echo ""
 echo "Building synapse image on "$hostname""
-echo "Executing command: packer build -var \"host_id="$hostname"\" -var \"version=$version\" -var \"synapse_version=$synapse_version\" "$SCRIPT_DIR"/../image-build/synapse.pkr.hcl"
-packer build -var "host_id="$hostname"" -var "version=$version" -var "synapse_version=$synapse_version" "$SCRIPT_DIR"/../image-build/synapse.pkr.hcl
+echo "Executing command: packer build -var \"host_id="$hostname"\" -var \"version="$version"\" -var \"remote="$remote_build"\" -var \"synapse_version=$synapse_version\" "$SCRIPT_DIR"/../image-build/synapse.pkr.hcl"
+packer build -var "host_id="$hostname"" -var "version=$version" -var "remote="$remote_build"" -var "synapse_version=$synapse_version" "$SCRIPT_DIR"/../image-build/synapse.pkr.hcl
 echo "Completed"
 
 # Synapse-admin webserver
@@ -84,7 +86,7 @@ if [ "$PROJECT_IDP_MODE" == "standalone" ]
 then
   echo ""
   echo "Building synapse-admin image on "$hostname""
-  echo "Executing command: packer build -var \"host_id="$hostname"\" -var \"version=$version\" -var \"synapse_admin_version=$synapse_admin_version\" "$SCRIPT_DIR"/../image-build/synapse-admin.pkr.hcl"
-  packer build -var "host_id="$hostname"" -var "version=$version" -var "synapse_admin_version=$synapse_admin_version" "$SCRIPT_DIR"/../image-build/synapse-admin.pkr.hcl
+  echo "Executing command: packer build -var \"host_id="$hostname"\" -var \"version="$version"\" -var \"remote="$remote_build"\" -var \"synapse_admin_version=$synapse_admin_version\" "$SCRIPT_DIR"/../image-build/synapse-admin.pkr.hcl"
+  packer build -var "host_id="$hostname"" -var "version=$version" -var "remote="$remote_build"" -var "synapse_admin_version=$synapse_admin_version" "$SCRIPT_DIR"/../image-build/synapse-admin.pkr.hcl
   echo "Completed"
 fi
