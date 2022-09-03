@@ -4,8 +4,8 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 # Default project software versions
-element_version="1.11.3"
-synapse_version="1.65.0"
+element_version="1.11.4"
+synapse_version="1.66.0"
 synapse_admin_version="0.8.5"
 
 # Script directory
